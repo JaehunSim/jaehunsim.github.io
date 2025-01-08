@@ -10,34 +10,4 @@ author:
 
 안녕 블로그!!
 
-<div class="container text-center">
-
-<div class="row">
-
-<div class="col">
-
-Column
-
-</div>
-
-<div class="col">
-
-Column
-
-</div>
-
-<div class="col">
-
-Column
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-console.log("Hello");
-
-</script>
+<button type="button" class="btn btn-primary">Primary</button>
