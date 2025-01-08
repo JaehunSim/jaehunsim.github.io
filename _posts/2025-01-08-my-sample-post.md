@@ -9,3 +9,9 @@ author:
 # 이것은 저의 샘플 제목입니다.
 
 안녕 블로그!!
+
+<script>
+
+console.log("Hello");
+
+</script>
