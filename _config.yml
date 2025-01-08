@@ -12,3 +12,4 @@ header_pages:
   - about.md
 minima:
   skin: classic
+pagination: 3
