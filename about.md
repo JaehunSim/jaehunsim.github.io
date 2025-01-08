@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-저자 [심재훈](https://www.linkedin.com/in/jaehunsim/)
+블로그 주인장 [심재훈](https://www.linkedin.com/in/jaehunsim/)
