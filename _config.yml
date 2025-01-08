@@ -2,10 +2,7 @@ title: 유미의 투자이야기
 author:
   name: JaehunSim
   email: tapu1125@gmail.com
-description: >
-  Write an awesome description for your new site here. You can edit this line in
-  _config.yml. It will appear in your document head meta (for Google search
-  results) and in your feed.xml site description.
+description: 투자 이야기를 재밌게 풀어내는 블로그입니다. 2025년 1월부터 시작했습니다.
 theme: minima
 plugins:
   - jekyll-feed
@@ -13,4 +10,4 @@ plugins:
 header_pages:
   - about.md
 minima:
-  skin: classic
+  skin: dark
