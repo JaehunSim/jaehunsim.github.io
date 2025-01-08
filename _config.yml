@@ -11,3 +11,4 @@ header_pages:
   - about.md
 minima:
   skin: dark
+  date_format: "%Y %b %-d"
