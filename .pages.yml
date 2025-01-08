@@ -36,5 +36,5 @@ content:
         type: object
         fields:
           - { name: skin, label: Skin, type: select, options: { values: [ "classic", "dark", "auto", "solarized-light", "solarized-dark", "solarized" ] } }
-      - { name: pagination, label: Pagination, type: number }
+      - { name: paginate, label: Pagination, type: number }
         
