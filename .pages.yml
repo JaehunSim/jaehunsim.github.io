@@ -1,0 +1,38 @@
+media: media
+content:
+  - name: posts
+    label: Posts
+    type: collection
+    path: _posts
+    view:
+      fields: [ cover, title ]
+    fields:
+      - { name: layout, type: string, hidden: true, default: post }
+      - { name: cover, label: Cover image, type: image }
+      - { name: title, label: Title, type: string, required: true }
+      - { name: categories, label: Categories, type: select, options: { values: [ "misc", "junk" ] } }
+      - { name: author, label: Authors, type: string, list: true }
+      - { name: meta, label: Meta, type: string }
+      - { name: body, label: Body, type: rich-text }
+  - name: config
+    label: Jekyll config
+    type: file
+    path: _config.yml
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: author
+        label: Author
+        type: object
+        fields:
+          - { name: name, label: Name, type: string }
+          - { name: email, label: Email, type: string, pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" }
+      - { name: description, label: Description, type: string }
+      - { name: theme, label: Theme, type: string }
+      - { name: plugins, label: Plugins, type: string, list: true }
+      - { name: header_pages, label: Header pages, type: string, list: true }
+      - name: minima
+        label: Minima settings
+        description: Minima specific settings, which are only available from Minima 3.0 onward.
+        type: object
+        fields:
+          - { name: skin, label: Skin, type: select, options: { values: [ "classic", "dark", "auto", "solarized-light", "solarized-dark", "solarized" ] } }
