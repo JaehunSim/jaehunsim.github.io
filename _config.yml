@@ -10,4 +10,4 @@ plugins:
 header_pages:
   - about.md
 minima:
-  skin: classic
+  skin: solarized-dark
