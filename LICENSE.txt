@@ -1,3 +1,6 @@
+Copyright (c) 2025-present Jaehun Sim for articles and software codes in the articles.
+
+==Jekyll License==
 The MIT License (MIT)
 
 Copyright (c) 2016-present Parker Moore and the minima contributors

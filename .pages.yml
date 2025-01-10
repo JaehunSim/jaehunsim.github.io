@@ -36,5 +36,10 @@ content:
         type: object
         fields:
           - { name: skin, label: Skin, type: select, options: { values: [ "classic", "dark", "auto"] } }
-      - { name: sass, label: sass Settings, type: string, list: true }
+      - name: sass
+        label: sass Settings
+        type: object
+        fields:
+          - { name: quiet_deps, label: quiet_deps, type: boolean, default: true }
+      - { name: show_excerpts, label: Show Post Excerpts, type: boolean, default: true }
         

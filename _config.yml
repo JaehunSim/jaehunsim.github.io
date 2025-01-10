@@ -13,3 +13,4 @@ minima:
   skin: dark
 sass:
   quiet_deps: true
+show_excerpts: true
