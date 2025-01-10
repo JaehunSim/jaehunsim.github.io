@@ -35,5 +35,6 @@ content:
         description: Minima specific settings, which are only available from Minima 3.0 onward.
         type: object
         fields:
-          - { name: skin, label: Skin, type: select, options: { values: [ "classic", "dark", "auto", "solarized-light", "solarized-dark", "solarized" ] } }
+          - { name: skin, label: Skin, type: select, options: { values: [ "classic", "dark", "auto"] } }
+      - { name: sass, label: sass Settings, type: string, list: true }
         
