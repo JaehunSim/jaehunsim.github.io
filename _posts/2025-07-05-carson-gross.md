@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 복잡성 예산 - Carson Gross - 번역글
+title: 복잡성 예산 - Carson Gross
 categories: misc
 author:
   - 심재훈
