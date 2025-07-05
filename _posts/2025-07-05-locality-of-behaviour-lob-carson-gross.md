@@ -5,12 +5,6 @@ categories: misc
 author:
   - 심재훈
 ---
-안녕하세요, 저는 SK하이닉스에서 반도체 데이터 레이크 운영/구축을 맡고있습니다.
-
-신규 데이터 플랫폼을 구축하고 있는데, 관련해서 아키텍처 주제로 글을 읽고 있습니다.
-
-"행동의 지역성" 글을 제가 GPT와 함께 번역해왔습니다. 번역글 끝에 제 생각도 붙여서 공유드립니다.
-
 [원문: </> htmx ~ Locality of Behaviour (LoB)](https://htmx.org/essays/locality-of-behaviour/)
 
 Carson Gross
