@@ -29,13 +29,13 @@ HTML에서 \*AJAX 요청을 구현하는 두 가지 다른 방식을 고려해 �
 
 AJAX: Asynchronous JavaScript and XML (비동기 스크립트로 페이지 일부만을 전체 페이지 새로고침없이 바꿀 수 있는 기술, AJAX -> jQuery -> React, htmx로 변화해옴)
 
-```
+```html
 <button hx-get="/clicked">Click Me</button>
 ```
 
 두 번째는 [jQuery](https://jquery.com/)입니다:
 
-```
+```javascript
   $("#d1").on("click", function(){
     $.ajax({
          /* AJAX options... */
@@ -43,7 +43,7 @@ AJAX: Asynchronous JavaScript and XML (비동기 스크립트로 페이지 일�
   });
 ```
 
-```
+```html
 <button id="d1">Click Me</button>
 ```
 
