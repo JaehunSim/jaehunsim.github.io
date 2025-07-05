@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 행동의 지역성 (Locality of Behaviour - LoB) - Carson Gross - 번역글
+title: 행동의 지역성 (LoB) - Carson Gross
 categories: misc
 author:
   - 심재훈
@@ -13,33 +13,33 @@ Carson Gross
 
 \> “쉬운 유지보수를 위한 주요 특징은 지역성(locality)입니다. 지역성이란 프로그래머가 소스 코드의 작은 부분만 보고도 해당 소스를 이해할 수 있게 하는 특성입니다.” – \[Richard Gabriel\]([https://www.dreamsongs.com/Files/PatternsOfSoftware.pdf](https://www.dreamsongs.com/Files/PatternsOfSoftware.pdf))
 
-<br>
+  
 
-\## <span style="box-sizing: inherit; font-family: 'Microsoft Yahei', '맑은 고딕', 'Malgun Gothic', sans-serif !important; font-weight: 400; overflow-wrap: break-word; word-break: keep-all; background-color: transparent;">LoB 원칙</span>
+\## LoB 원칙
 
-<span style="box-sizing: inherit; font-family: 'Microsoft Yahei', '맑은 고딕', 'Malgun Gothic', sans-serif !important; font-weight: 400; overflow-wrap: break-word; word-break: keep-all; background-color: transparent;">행동의 지역성(Locality of Behaviour)은 다음을 의미하는 원칙입니다:</span>
+행동의 지역성(Locality of Behaviour)은 다음을 의미하는 원칙입니다:
 
 \> 코드 단위의 행동은 해당 코드 단위만 보더라도 가능한 한 명확해야 한다.
 
-<br>
+  
 
 \## 논의
 
-LoB 원칙은 \[Richard Gabriel\]([https://www.dreamsongs.com/)의](https://www.dreamsongs.com/\)의) 인용문을 간단하고 규범적으로 공식화한 것입니다. 가능한 한, 그리고 다른 고려사항들과 균형을 이루면서, 개발자들은 "코드 요소의 행동"이 코드확인시 명확하도록 노력해야 합니다.
+LoB 원칙은 \[Richard Gabriel\]([https://www.dreamsongs.com/)의](https://www.dreamsongs.com/\)%EC%9D%98) 인용문을 간단하고 규범적으로 공식화한 것입니다. 가능한 한, 그리고 다른 고려사항들과 균형을 이루면서, 개발자들은 "코드 요소의 행동"이 코드확인시 명확하도록 노력해야 합니다.
 
 (원문: developers should strive to make the behaviour of a code element obvious on inspection)
 
-HTML에서 \\\*AJAX 요청을 구현하는 두 가지 다른 방식을 고려해 봅시다. 첫 번째는 \[htmx\]([https://htmx.org/)입니다](https://htmx.org/\)입니다):
+HTML에서 \\\*AJAX 요청을 구현하는 두 가지 다른 방식을 고려해 봅시다. 첫 번째는 \[htmx\]([https://htmx.org/)입니다](https://htmx.org/\)%EC%9E%85%EB%8B%88%EB%8B%A4):
 
 AJAX: Asynchronous JavaScript and XML (비동기 스크립트로 페이지 일부만을 전체 페이지 새로고침없이 바꿀 수 있는 기술, AJAX -> jQuery -> React, htmx로 변화해옴)
 
 \`\`\`html
 
-<button hx-get="/clicked">Click Me</button>
+Click Me
 
 \`\`\`
 
-<span style="color: rgb(12, 12, 12); font-family: 'Microsoft Yahei', '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">두 번째는</span>\[ jQuery\]([https://jquery.com/)<span](https://jquery.com/\)<span) style="color: rgb(12, 12, 12); font-family: 'Microsoft Yahei', '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">입니다:</span>
+두 번째는\[ jQuery\]([https://jquery.com/)<span](https://jquery.com/\)%3Cspan) style="color: rgb(12, 12, 12); font-family: 'Microsoft Yahei', '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">입니다:
 
 \`\`\`javascript
 
@@ -57,11 +57,11 @@ $.ajax({
 
 \`\`\`html
 
-<button id="d1">Click Me</button>
+Click Me
 
 \`\`\`
 
-<br>
+  
 
 전자의 경우, 버튼 요소의 행동은 검사 시 명확하여 LoB 원칙을 만족합니다.
 
@@ -69,7 +69,7 @@ $.ajax({
 
 htmx 예시는 좋은 행동의 지역성을 보여주는 반면, jQuery 예시는 행동의 지역성이 좋지 않습니다.
 
-<br>
+  
 
 \### 행동 표면화 vs. 구현 인라인화
 
@@ -79,13 +79,13 @@ htmx 예시는 좋은 행동의 지역성을 보여주는 반면, jQuery 예시�
 
 다른 조건이 동일하다면, "요소의 행동 명확성"을 높이는 것은 좋은 일입니다. 하지만 LoB를 가능한 한 쉽고 개념적으로 깔끔하게 만드는 것은 최종 개발자, 특히 프레임워크 개발자의 몫입니다.
 
-<br>
+  
 
 \### 다른 개발 원칙과의 충돌
 
 LoB는 종종 다른 소프트웨어 개발 원칙들과 충돌할 수 있습니다. 두 가지 중요한 원칙은 다음과 같습니다:
 
-\* **\[DRY - 반복하지 마라 (Don’t Repeat Yourself)\](**[**https://en.wikipedia.org/wiki/Don%27t\_repeat\_yourself)**](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself\)**)
+\* **\[DRY - 반복하지 마라 (Don’t Repeat Yourself)\](\*\*\[\*\*[https://en.wikipedia.org/wiki/Don%27t\\\_repeat\\\_yourself](https://en.wikipedia.org/wiki/Don%27t%5C_repeat%5C_yourself))**\]([https://en.wikipedia.org/wiki/Don%27t\_repeat\_yourself\\](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself%5C))\*\*)
 
 소프트웨어 개발자들은 일반적으로 코드나 데이터의 중복을 피하려고 노력합니다. 이를 "DRY 유지하기", 즉 "반복하지 마라"라고 부릅니다. 다른 소프트웨어 설계 원칙과 마찬가지로, 이 원칙 자체는 좋은 것입니다. 예를 들어, htmx는 DOM의 부모 요소에 많은 속성을 배치하여 자식 요소에 이러한 속성을 반복하는 것을 피할 수 있게 합니다. 이는 DRY를 위해 LoB를 위반하는 것이며, 이러한 절충은 개발자가 신중하게 이루어져야 합니다.
 
@@ -101,7 +101,7 @@ LoB는 종종 다른 소프트웨어 개발 원칙들과 충돌할 수 있습니
 
 다시 말하지만, 이것은 SoC를 전면적으로 비난하는 것이 아니라, 코드를 어떻게 구성할지 고려할 때 주관적인 절충이 이루어져야 한다는 것을 말하는 것입니다. 최근 인라인 스타일이 더 보편화된 사실은 SoC가 개발자들 사이에서 일부 지지를 잃고 있다는 징후입니다.
 
-<br>
+  
 
 \## 결론
 
@@ -111,7 +111,7 @@ LoB는 코드베이스를 더 인간적이고 유지보수하기 쉽게 만들 �
 
 \*\*\*
 
-<br>
+  
 
 \### 제 의견
 
@@ -119,7 +119,7 @@ LoB는 코드베이스를 더 인간적이고 유지보수하기 쉽게 만들 �
 
 개발원칙들간 충돌이 있다고 하지만, 프로젝트 규모에 따라 더 가치를 둘 개발원칙이 있다고 생각합니다.
 
-예를 들면, OS 관련된 모든 코드를 하나의 파일에 넣어둘 순 없겠죠. 그러나 HTMX (리엑트와 비슷한 AJAX library)는 \[단 하나의 파일\]([https://github.com/bigskysoftware/htmx/blob/master/src/htmx.js)에](https://github.com/bigskysoftware/htmx/blob/master/src/htmx.js\)에) 코드를 몰아넣었습니다.
+예를 들면, OS 관련된 모든 코드를 하나의 파일에 넣어둘 순 없겠죠. 그러나 HTMX (리엑트와 비슷한 AJAX library)는 \[단 하나의 파일\]([https://github.com/bigskysoftware/htmx/blob/master/src/htmx.js)에](https://github.com/bigskysoftware/htmx/blob/master/src/htmx.js\)%EC%97%90) 코드를 몰아넣었습니다.
 
 Django (MVT), Spring (MVC) 같은 기능이 많은 프로젝트는 SoC이 잘되어 있습니다. 그러나 flask, FastAPI같은 micro framework는 단 하나의 파일에도 작동합니다.
 
