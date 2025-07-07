@@ -8,6 +8,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-sitemap
 header_pages:
   - about.md
 minima:
