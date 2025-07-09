@@ -1,2 +1,3 @@
 User-agent: *
+Allow: /
 Sitemap: https://jaehunsim.github.io/sitemap.xml
