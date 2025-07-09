@@ -2,7 +2,7 @@ title: 유미의 투자이야기
 author:
   name: Jaehun Sim
   email: tapu1125@gmail.com
-description: 투자 이야기를 재밌게 풀어내는 블로그입니다. 2025년 1월부터 시작했습니다!
+description: 투자 이야기를 재밌게 풀어내는 블로그
 theme: minima
 plugins:
   - jekyll-feed
