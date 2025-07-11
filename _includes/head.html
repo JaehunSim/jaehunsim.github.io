@@ -10,6 +10,14 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2/dist/chartjs-plugin-annotation.min.js"></script>
+  <script>
+  (function() {
+    const trackingUrl = 'https://jaehunsim.pythonanywhere.com/track/';
+    const pagePath = window.location.pathname;
+    const img = new Image();
+    img.src = `${trackingUrl}?path=${encodeURIComponent(pagePath)}`;
+  })();
+  </script>
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
   {%- feed_meta -%}
