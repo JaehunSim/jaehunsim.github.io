@@ -42,6 +42,6 @@ content:
         fields:
           - { name: quiet_deps, label: quiet_deps, type: boolean, default: true }
       - { name: show_excerpts, label: Show Post Excerpts, type: boolean, default: true }
-      - { name: paginate, label: paginate, type: number, default: 3 }
+      - { name: paginate, label: paginate, type: number, default: 5 }
       - { name: google_analytics, label: google_analytics, type: string }
         
