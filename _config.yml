@@ -16,5 +16,5 @@ minima:
 sass:
   quiet_deps: true
 show_excerpts: true
-paginate: 3
+paginate: 5
 google_analytics: G-VG2T1XV09L
