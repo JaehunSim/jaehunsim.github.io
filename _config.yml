@@ -18,3 +18,4 @@ sass:
 show_excerpts: true
 paginate: 5
 google_analytics: G-VG2T1XV09L
+future: true
