@@ -4,94 +4,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello & Expressions</title>
+    <title>13-Month-Old Baby Milestones</title>
     <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #00cec9;
+            --accent: #ff7675;
+            --bg: #f9f9fb;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 0;
         }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            padding: 3rem 1rem;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
         }
-        h1 {
-            color: #333;
-            margin-bottom: 0.5rem;
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        #expression-display {
-            font-size: 4rem;
-            margin: 1rem 0;
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: -3rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-        #message {
-            font-size: 1.2rem;
-            color: #555;
-            min-height: 1.5em;
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
             margin-bottom: 1.5rem;
         }
-        .button-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background-color: #4a90e2;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
+
+        ul {
+            text-align: left;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
             font-weight: bold;
         }
-        button:hover {
-            background-color: #357abd;
+
+        .disclaimer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #ffeaa7;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border-left: 5px solid #fab1a0;
         }
-        button:active {
-            transform: scale(0.98);
+
+        @media (max-width: 600px) {
+            .milestone-grid {
+                margin-top: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Hello!</h1>
-    <div id="expression-display">👋</div>
-    <p id="message">How can I help you today?</p>
-    
-    <div class="button-group">
-        <button onclick="update('😊', 'I\'m feeling happy to see you!')">Happy</button>
-        <button onclick="update('🤔', 'That is an interesting thought...')">Thoughtful</button>
-        <button onclick="update('🚀', 'Let\'s get started on something big!')">Excited</button>
-        <button onclick="update('😎', 'Stay cool and keep coding.')">Cool</button>
+<header>
+    <h1>13-Month-Old Milestones</h1>
+    <p>Watching your little toddler explore the world!</p>
+</header>
+
+<div class="container">
+    <div class="milestone-grid">
+        
+        <!-- Physical Milestones -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 4v16M17 4v16M9 4v16M5 4v16"/>
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="2 2"/>
+                </svg>
+            </div>
+            <h2>Movement</h2>
+            <ul>
+                <li>May take a few steps alone.</li>
+                <li>"Cruising" while holding onto furniture.</li>
+                <li>Pulls self up to a standing position.</li>
+                <li>Can sit down from a standing position.</li>
+            </ul>
+        </div>
+
+        <!-- Cognitive Milestones -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00cec9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <circle cx="12" cy="11" r="3"/>
+                </svg>
+            </div>
+            <h2>Cognitive</h2>
+            <ul>
+                <li>Explores objects by shaking or throwing.</li>
+                <li>Finds hidden objects easily.</li>
+                <li>Can follow simple one-step directions.</li>
+                <li>Points to things they want to see.</li>
+            </ul>
+        </div>
+
+        <!-- Social & Emotional -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ff7675" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
+            <h2>Social</h2>
+            <ul>
+                <li>Shows affection to familiar people.</li>
+                <li>May have "separation anxiety" when parents leave.</li>
+                <li>Hands you a book when they want to hear a story.</li>
+                <li>Plays simple games like Pat-a-cake.</li>
+            </ul>
+        </div>
+
+        <!-- Feeding & Language -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/>
+                    <line x1="10" y1="1" x2="10" y2="4"/>
+                    <line x1="14" y1="1" x2="14" y2="4"/>
+                </svg>
+            </div>
+            <h2>Feeding & Language</h2>
+            <ul>
+                <li>Uses simple gestures (shaking head "no").</li>
+                <li>Tries to say 1 or 2 words (like "Mama" or "Dada").</li>
+                <li>Drinks from an open cup (with help).</li>
+                <li>Uses fingers to feed themselves.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="disclaimer">
+        <strong>Note:</strong> Every baby develops at their own pace. This list is a general guide. If you have concerns about your child's development, please consult your pediatrician. At 13 months, many babies are in a "transition phase" between crawling and walking.
     </div>
 </div>
-
-<script>
-    function update(emoji, text) {
-        const display = document.getElementById('expression-display');
-        const message = document.getElementById('message');
-        
-        display.textContent = emoji;
-        message.textContent = text;
-        
-        // Add a little pop animation
-        display.style.transform = 'scale(1.2)';
-        setTimeout(() => {
-            display.style.transform = 'scale(1)';
-        }, 200);
-    }
-</script>
 
 </body>
 </html>
