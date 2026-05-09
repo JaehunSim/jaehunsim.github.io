@@ -1,1 +1,97 @@
-<h1>hello</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello & Expressions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        #expression-display {
+            font-size: 4rem;
+            margin: 1rem 0;
+            transition: transform 0.3s ease;
+        }
+        #message {
+            font-size: 1.2rem;
+            color: #555;
+            min-height: 1.5em;
+            margin-bottom: 1.5rem;
+        }
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4a90e2;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Hello!</h1>
+    <div id="expression-display">👋</div>
+    <p id="message">How can I help you today?</p>
+    
+    <div class="button-group">
+        <button onclick="update('😊', 'I\'m feeling happy to see you!')">Happy</button>
+        <button onclick="update('🤔', 'That is an interesting thought...')">Thoughtful</button>
+        <button onclick="update('🚀', 'Let\'s get started on something big!')">Excited</button>
+        <button onclick="update('😎', 'Stay cool and keep coding.')">Cool</button>
+    </div>
+</div>
+
+<script>
+    function update(emoji, text) {
+        const display = document.getElementById('expression-display');
+        const message = document.getElementById('message');
+        
+        display.textContent = emoji;
+        message.textContent = text;
+        
+        // Add a little pop animation
+        display.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            display.style.transform = 'scale(1)';
+        }, 200);
+    }
+</script>
+
+</body>
+</html>
