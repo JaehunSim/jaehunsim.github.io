@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My GitHub HTML Previewer</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+        #controls { background: #333; color: white; padding: 10px; display: flex; gap: 10px; }
+        input { flex-grow: 1; padding: 5px; border-radius: 4px; border: none; }
+        button { cursor: pointer; padding: 5px 15px; background: #2ea44f; color: white; border: none; border-radius: 4px; }
+        iframe { width: 100%; height: calc(100vh - 50px); border: none; background: white; }
+    </style>
+</head>
+<body>
+
+    <div id="controls">
+        <input type="text" id="urlInput" placeholder="Paste GitHub HTML URL here (e.g. https://github.com/user/repo/blob/main/index.html)">
+        <button onclick="preview()">Preview</button>
+    </div>
+
+    <iframe id="previewFrame"></iframe>
+
+    <script>
+        function preview() {
+            let url = document.getElementById('urlInput').value;
+            
+            // Convert GitHub blob URL to Raw URL
+            // From: https://github.com/user/repo/blob/main/file.html
+            // To:   https://raw.githubusercontent.com/user/repo/main/file.html
+            let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+
+            fetch(rawUrl)
+                .then(response => response.text())
+                .then(html => {
+                    const doc = document.getElementById('previewFrame').contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                })
+                .catch(err => alert('Error loading file. Make sure the URL is public.'));
+        }
+
+        // Allow loading via URL param: render.html?url=...
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('url')) {
+            document.getElementById('urlInput').value = params.get('url');
+            preview();
+        }
+    </script>
+</body>
+</html>
