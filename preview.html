@@ -12,14 +12,10 @@
 </head>
 <body>
     <iframe id="previewFrame"></iframe>
-    <hr>
-    <div id="controls">
-        <input type="text" id="urlInput" placeholder="Paste GitHub HTML URL here (e.g. https://github.com/user/repo/blob/main/index.html)">
-        <button onclick="preview()">Preview</button>
-    </div>
     <script>
         function preview() {
-            let url = document.getElementById('urlInput').value;
+            const params = new URLSearchParams(window.location.search);
+            let url = params.get('url');
             
             // Convert GitHub blob URL to Raw URL
             // From: https://github.com/user/repo/blob/main/file.html
@@ -36,13 +32,8 @@
                 })
                 .catch(err => alert('Error loading file. Make sure the URL is public.'));
         }
-
-        // Allow loading via URL param: render.html?url=...
-        const params = new URLSearchParams(window.location.search);
-        if(params.has('url')) {
-            document.getElementById('urlInput').value = params.get('url');
-            preview();
-        }
+        preview();
+  
     </script>
 </body>
 </html>
