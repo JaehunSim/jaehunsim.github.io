@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding KV Cache</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f9;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 20px 0;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>What is KV Cache?</h1>
+    
+    <div class="card">
+        <p>In Large Language Models, generating text is <strong>autoregressive</strong>. This means the model predicts one token at a time, and each new token depends on all previous tokens.</p>
+        <p>Without a cache, the model would have to re-calculate the "Key" and "Value" vectors for every single word in the sentence every time it wants to generate the next word. This is highly inefficient.</p>
+    </div>
+
+    <h2>1. The Problem: Redundant Computation</h2>
+    <div class="card">
+        <p>Imagine generating the sentence: <em>"The cat sat"</em>. To generate the word <b>"on"</b>, the model processes "The", "cat", and "sat". To then generate <b>"the"</b>, it processes "The", "cat", "sat", and "on" all over again.</p>
+        
+        <div class="svg-container">
+            <!-- SVG: Redundant Computation -->
+            <svg width="600" height="200" viewBox="0 0 600 200">
+                <!-- Step 1 -->
+                <rect x="10" y="20" width="80" height="40" rx="5" fill="#3498db" />
+                <text x="50" y="45" text-anchor="middle" fill="white" font-size="12">The</text>
+                <path d="M 90 40 L 130 40" stroke="#7f8c8d" fill="none" marker-end="url(#arrow)" />
+                <rect x="140" y="20" width="100" height="40" rx="5" fill="#95a5a6" />
+                <text x="190" y="45" text-anchor="middle" fill="white" font-size="12">Predicts: "cat"</text>
+
+                <!-- Step 2 -->
+                <rect x="10" y="80" width="60" height="30" rx="5" fill="#3498db" opacity="0.6" />
+                <rect x="75" y="80" width="60" height="30" rx="5" fill="#3498db" />
+                <text x="40" y="100" text-anchor="middle" fill="white" font-size="10">The</text>
+                <text x="105" y="100" text-anchor="middle" fill="white" font-size="10">cat</text>
+                <path d="M 140 95 L 180 95" stroke="#7f8c8d" fill="none" />
+                <rect x="190" y="80" width="100" height="30" rx="5" fill="#95a5a6" />
+                <text x="240" y="100" text-anchor="middle" fill="white" font-size="10">Predicts: "sat"</text>
+
+                <!-- Step 3 (Wasteful) -->
+                <rect x="10" y="130" width="50" height="30" rx="5" fill="#e74c3c" />
+                <rect x="65" y="130" width="50" height="30" rx="5" fill="#e74c3c" />
+                <rect x="120" y="130" width="50" height="30" rx="5" fill="#e74c3c" />
+                <text x="35" y="150" text-anchor="middle" fill="white" font-size="10">The</text>
+                <text x="90" y="150" text-anchor="middle" fill="white" font-size="10">cat</text>
+                <text x="145" y="150" text-anchor="middle" fill="white" font-size="10">sat</text>
+                <text x="250" y="150" font-size="12" fill="#e74c3c">Re-calculating previous tokens!</text>
+
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#7f8c8d" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+        <p>The red boxes represent wasted GPU cycles. We already knew the mathematical representation of "The" and "cat", yet we re-calculated them.</p>
+    </div>
+
+    <h2>2. The Solution: KV Cache</h2>
+    <div class="card">
+        <p>In the Transformer <b>Self-Attention</b> mechanism, each token has three vectors: <strong>Query (Q)</strong>, <strong>Key (K)</strong>, and <strong>Value (V)</strong>.
+        To calculate the next word, we only need the <strong>Query</strong> of the <i>newest</i> token, but we need the <strong>Keys and Values</strong> of <i>all</i> previous tokens.</p>
+        
+        <div class="svg-container">
+            <!-- SVG: KV Cache Workflow -->
+            <svg width="700" height="300" viewBox="0 0 700 300">
+                <!-- GPU Block -->
+                <rect x="50" y="50" width="200" height="150" fill="#ecf0f1" stroke="#2c3e50" stroke-width="2"/>
+                <text x="150" y="40" text-anchor="middle" font-weight="bold">GPU Processing</text>
+                <text x="150" y="80" text-anchor="middle" font-size="12">Current Token: "sat"</text>
+                
+                <!-- Vector extractions -->
+                <rect x="70" y="100" width="30" height="20" fill="#f1c40f" /> <text x="110" y="115" font-size="12">Q</text>
+                <rect x="70" y="130" width="30" height="20" fill="#2ecc71" /> <text x="110" y="145" font-size="12">K</text>
+                <rect x="70" y="160" width="30" height="20" fill="#9b59b6" /> <text x="110" y="175" font-size="12">V</text>
+
+                <!-- Cache Storage -->
+                <rect x="400" y="50" width="200" height="150" fill="#d5f5e3" stroke="#27ae60" stroke-dasharray="5,5"/>
+                <text x="500" y="40" text-anchor="middle" font-weight="bold" fill="#27ae60">KV Cache (VRAM)</text>
+                
+                <!-- Cached items -->
+                <rect x="420" y="70" width="160" height="30" rx="5" fill="#2ecc71" opacity="0.3" />
+                <text x="500" y="90" text-anchor="middle" font-size="10">K, V for "The"</text>
+                <rect x="420" y="110" width="160" height="30" rx="5" fill="#2ecc71" opacity="0.5" />
+                <text x="500" y="130" text-anchor="middle" font-size="10">K, V for "cat"</text>
+
+                <!-- Arrows -->
+                <path d="M 250 145 L 390 145" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowG)" />
+                <text x="320" y="135" text-anchor="middle" font-size="11" fill="#27ae60">Store New KV</text>
+
+                <path d="M 400 170 Q 325 250 250 170" stroke="#2980b9" stroke-width="2" fill="none" marker-end="url(#arrowB)" />
+                <text x="325" y="240" text-anchor="middle" font-size="11" fill="#2980b9">Fetch Past KV</text>
+
+                <defs>
+                    <marker id="arrowG" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#27ae60" />
+                    </marker>
+                    <marker id="arrowB" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#2980b9" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+    </div>
+
+    <h2>3. How it Works (Step-by-Step)</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Step 1: Prefill</h3>
+            <p>When you send a prompt, the model processes all tokens at once and calculates the Initial <b>K</b> and <b>V</b> values. These are stored in the GPU memory (VRAM).</p>
+        </div>
+        <div class="card">
+            <h3>Step 2: Decoding</h3>
+            <p>For every new word generated:</p>
+            <ul>
+                <li>Only calculate <b>Q, K, V</b> for the 1 new token.</li>
+                <li>Store the new <b>K, V</b> in the cache.</li>
+                <li>Pull <b>all previous K, V</b> from the cache to perform the attention math.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>4. The Trade-off: Memory vs. Speed</h2>
+    <div class="card">
+        <p>While KV Caching makes generation much faster, it consumes a significant amount of <strong>VRAM</strong>. This is why models have "context limits" (e.g., 32k tokens). The longer the conversation, the larger the KV Cache grows.</p>
+        <ul>
+            <li><strong>Speed:</strong> Significantly faster (O(n) vs O(n²)).</li>
+            <li><strong>Memory:</strong> Requires <code>2 * layers * heads * head_dim * precision</code> bytes per token.</li>
+        </ul>
+    </div>
+
+</body>
+</html>
