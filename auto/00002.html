@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Guide to Better Sleep</title>
+    <style>
+        :root {
+            --primary-dark: #1a1a2e;
+            --secondary-dark: #16213e;
+            --accent-blue: #4ecca3;
+            --text-light: #e9ecef;
+            --card-bg: #222831;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+        }
+
+        .subtitle {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .checklist {
+            background-color: #0f3460;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .warning {
+            border-color: #e94560;
+            background-color: rgba(233, 69, 96, 0.1);
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌙 Restful Sleep Guide</h1>
+        <p class="subtitle">Mastering the science of circadian rhythms and relaxation.</p>
+    </header>
+
+    <div class="grid">
+        <!-- Section 1: Consistency -->
+        <div class="card">
+            <h2><span class="icon">⏰</span> Be Consistent</h2>
+            <ul>
+                <li>Go to bed and wake up at the same time every day, including weekends.</li>
+                <li>This reinforces your body's sleep-wake cycle (circadian rhythm).</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: Environment -->
+        <div class="card">
+            <h2><span class="icon">🕯️</span> The Environment</h2>
+            <ul>
+                <li>Keep your room <strong>cool</strong> (around 65°F / 18°C).</li>
+                <li>Ensure total <strong>darkness</strong> using blackout curtains or an eye mask.</li>
+                <li>Eliminate noise with earplugs or white noise machines.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Pre-Sleep Routine -->
+        <div class="card">
+            <h2><span class="icon">🧘</span> Wind Down</h2>
+            <ul>
+                <li>Avoid screens (blue light) 1 hour before bed.</li>
+                <li>Try reading a physical book, meditation, or a warm bath.</li>
+                <li>Dim the lights in your house as bedtime approaches.</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: Daily Habits -->
+        <div class="card">
+            <h2><span class="icon">☀️</span> Daytime Habits</h2>
+            <ul>
+                <li>Get natural sunlight within 30 minutes of waking up.</li>
+                <li>Exercise daily, but avoid intense workouts 2-3 hours before bed.</li>
+                <li>Limit naps to 20 minutes and avoid them after 3 PM.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="checklist">
+        <h2>🚫 What to Avoid</h2>
+        <ul>
+            <li><strong>Caffeine:</strong> Stop intake at least 8-10 hours before bed.</li>
+            <li><strong>Alcohol:</strong> It might help you fall asleep, but it ruins sleep <em>quality</em>.</li>
+            <li><strong>Heavy Meals:</strong> Finish eating 2-3 hours before lying down to prevent indigestion.</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ Note:</strong> If you struggle with chronic insomnia or feel excessively tired during the day despite following these steps, consider consulting a healthcare professional to rule out sleep apnea or other underlying conditions.
+    </div>
+</div>
+
+</body>
+</html>
