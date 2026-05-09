@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Starter Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --primary-color: #3776ab; /* Python Blue */
+            --secondary-color: #ffd43b; /* Python Yellow */
+            --code-bg: #1e1e1e;
+            --card-bg: #ffffff;
+            --accent: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block Styling */
+        .code-container {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            color: #dcdcdc;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .copy-btn.copied {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code.inline-code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🐍 Python for Starters</h1>
+        <p>Your journey to becoming a programmer starts here.</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="intro">
+            <h2>Welcome!</h2>
+            <p>Python is one of the most popular, beginner-friendly programming languages in the world. It’s used for web development, data science, AI, and simple automation.</p>
+        </div>
+
+        <!-- Section 1 -->
+        <section id="setup">
+            <h2><span class="step-number">1</span> Installation</h2>
+            <p>Before writing code, you need Python installed on your computer:</p>
+            <ul>
+                <li>Go to <a href="https://python.org" target="_blank">python.org</a>.</li>
+                <li>Download the latest version for your OS.</li>
+                <li><strong>Important:</strong> During installation on Windows, check the box that says <b>"Add Python to PATH"</b>.</li>
+            </ul>
+        </section>
+
+        <!-- Section 2 -->
+        <section id="hello-world">
+            <h2><span class="step-number">2</span> Your First Program</h2>
+            <p>The traditional start is the "Hello World" program. It simply displays text on the screen.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre><code># This is a comment - Python ignores this
+print("Hello, World!")
+print("I am learning Python!")</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="variables">
+            <h2><span class="step-number">3</span> Variables & Data Types</h2>
+            <p>Variables store information. In Python, you don't need to declare the type; it figures it out automatically.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre><code># String (text)
+name = "Alice"
+
+# Integer (whole numbers)
+age = 25
+
+# Float (decimal numbers)
+height = 5.9
+
+# Boolean (True or False)
+is_student = True
+
+print(name, "is", age, "years old.")</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section id="logic">
+            <h2><span class="step-number">4</span> Making Decisions (If/Else)</h2>
+            <p>Use <code class="inline-code">if</code> statements to let your program make decisions based on conditions.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre><code>score = 85
+
+if score >= 90:
+    print("Grade: A")
+elif score >= 80:
+    print("Grade: B")
+else:
+    print("Keep practicing!")</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section id="loops">
+            <h2><span class="step-number">5</span> Loops</h2>
+            <p>Loops allow you to repeat a block of code multiple times.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre><code># A 'for' loop to count to 5
+print("Counting...")
+for i in range(1, 6):
+    print(i)
+
+# A 'while' loop
+count = 0
+while count < 3:
+    print("Looping...")
+    count += 1</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 6 -->
+        <section id="functions">
+            <h2><span class="step-number">6</span> Functions</h2>
+            <p>Functions are reusable blocks of code that perform a specific task.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre><code>def greet(person_name):
+    return "Hello, " + person_name + "!"
+
+# Calling the function
+message = greet("Developer")
+print(message)</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <p>Keep coding! The best way to learn is by building small projects.</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            // Find the code element
+            const container = button.parentElement;
+            const code = container.querySelector('code');
+            const text = code.innerText;
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
