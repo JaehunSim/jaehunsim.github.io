@@ -13,44 +13,26 @@
 <body>
     <iframe id="previewFrame"></iframe>
     <script>
-      function preview() {
-          const params = new URLSearchParams(window.location.search);
-          let url = params.get('url');
-          if (!url) return;
-          
-          // 1. Convert GitHub blob URL to Raw URL
-          let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-      
-          // 2. Add a Cache-Buster (Unique timestamp) to the URL
-          // This forces GitHub's CDN to treat it as a new request every time
-          const cacheBuster = "t=" + new Date().getTime();
-          rawUrl += (rawUrl.includes('?') ? '&' : '?') + cacheBuster;
-      
-          // 3. Set fetch options to avoid browser cache
-          fetch(rawUrl, {
-              cache: "no-store", // Do not check the cache, do not update the cache
-              headers: {
-                  'Cache-Control': 'no-cache',
-                  'Pragma': 'no-cache'
-              }
-          })
-          .then(response => {
-              if (!response.ok) throw new Error('Network response was not ok');
-              return response.text();
-          })
-          .then(html => {
-              const frame = document.getElementById('previewFrame');
-              const doc = frame.contentWindow.document;
-              doc.open();
-              doc.write(html);
-              doc.close();
-          })
-          .catch(err => {
-              console.error(err);
-              alert('Error loading file. Make sure the URL is public and correct.');
-          });
-      }
-      preview();
+        function preview() {
+            const params = new URLSearchParams(window.location.search);
+            let url = params.get('url');
+            
+            // Convert GitHub blob URL to Raw URL
+            // From: https://github.com/user/repo/blob/main/file.html
+            // To:   https://raw.githubusercontent.com/user/repo/main/file.html
+            let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+
+            fetch(rawUrl, { cache: 'no-store' })
+                .then(response => response.text())
+                .then(html => {
+                    const doc = document.getElementById('previewFrame').contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                })
+                .catch(err => alert('Error loading file. Make sure the URL is public.'));
+        }
+        preview();
   
     </script>
 </body>
