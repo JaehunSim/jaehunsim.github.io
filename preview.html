@@ -11,10 +11,12 @@
     </style>
 </head>
 <body>
-
-
     <iframe id="previewFrame"></iframe>
-
+    <hr>
+    <div id="controls">
+        <input type="text" id="urlInput" placeholder="Paste GitHub HTML URL here (e.g. https://github.com/user/repo/blob/main/index.html)">
+        <button onclick="preview()">Preview</button>
+    </div>
     <script>
         function preview() {
             let url = document.getElementById('urlInput').value;
