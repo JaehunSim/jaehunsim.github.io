@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-Month-Old Baby Milestones</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #00cec9;
+            --accent: #ff7675;
+            --bg: #f9f9fb;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: -3rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            text-align: left;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .disclaimer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #ffeaa7;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border-left: 5px solid #fab1a0;
+        }
+
+        @media (max-width: 600px) {
+            .milestone-grid {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>13-Month-Old Milestones</h1>
+    <p>Watching your little toddler explore the world!</p>
+</header>
+
+<div class="container">
+    <div class="milestone-grid">
+        
+        <!-- Physical Milestones -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 4v16M17 4v16M9 4v16M5 4v16"/>
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="2 2"/>
+                </svg>
+            </div>
+            <h2>Movement</h2>
+            <ul>
+                <li>May take a few steps alone.</li>
+                <li>"Cruising" while holding onto furniture.</li>
+                <li>Pulls self up to a standing position.</li>
+                <li>Can sit down from a standing position.</li>
+            </ul>
+        </div>
+
+        <!-- Cognitive Milestones -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00cec9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <circle cx="12" cy="11" r="3"/>
+                </svg>
+            </div>
+            <h2>Cognitive</h2>
+            <ul>
+                <li>Explores objects by shaking or throwing.</li>
+                <li>Finds hidden objects easily.</li>
+                <li>Can follow simple one-step directions.</li>
+                <li>Points to things they want to see.</li>
+            </ul>
+        </div>
+
+        <!-- Social & Emotional -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ff7675" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
+            <h2>Social</h2>
+            <ul>
+                <li>Shows affection to familiar people.</li>
+                <li>May have "separation anxiety" when parents leave.</li>
+                <li>Hands you a book when they want to hear a story.</li>
+                <li>Plays simple games like Pat-a-cake.</li>
+            </ul>
+        </div>
+
+        <!-- Feeding & Language -->
+        <div class="card">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/>
+                    <line x1="10" y1="1" x2="10" y2="4"/>
+                    <line x1="14" y1="1" x2="14" y2="4"/>
+                </svg>
+            </div>
+            <h2>Feeding & Language</h2>
+            <ul>
+                <li>Uses simple gestures (shaking head "no").</li>
+                <li>Tries to say 1 or 2 words (like "Mama" or "Dada").</li>
+                <li>Drinks from an open cup (with help).</li>
+                <li>Uses fingers to feed themselves.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="disclaimer">
+        <strong>Note:</strong> Every baby develops at their own pace. This list is a general guide. If you have concerns about your child's development, please consult your pediatrician. At 13 months, many babies are in a "transition phase" between crawling and walking.
+    </div>
+</div>
+
+</body>
+</html>
