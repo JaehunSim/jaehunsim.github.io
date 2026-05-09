@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Browser REPL</title>
+    <!-- Load Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .status {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .status.ready { color: #4caf50; }
+        .status.loading { color: #ff9800; }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 2px;
+            background-color: #444;
+        }
+
+        .editor-container, .output-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e;
+        }
+
+        textarea {
+            flex: 1;
+            background-color: #1e1e1e;
+            color: #9cdcfe;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            padding: 15px;
+            border: none;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        #output {
+            flex: 1;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: #d4d4d4;
+        }
+
+        .label {
+            background: #252526;
+            padding: 5px 15px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            border-bottom: 1px solid #333;
+        }
+
+        button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 2px;
+        }
+
+        button:hover { background-color: #1177bb; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <strong>Python HTML REPL</strong>
+        <span id="status" class="status loading"> [Initializing Pyodide...]</span>
+    </div>
+    <button id="run-btn" disabled onclick="runPython()">Run (Ctrl+Enter)</button>
+</header>
+
+<main>
+    <div class="editor-container">
+        <div class="label">Input</div>
+        <textarea id="code" spellcheck="false"># Write Python code here
+import sys
+
+print("Hello from Python in the browser!")
+print(f"Python version: {sys.version}")
+
+def greet(name):
+    return f"Welcome, {name}!"
+
+for i in range(3):
+    print(greet(f"User {i+1}"))
+
+[x**2 for x in range(5)]
+        </textarea>
+    </div>
+    <div class="output-container">
+        <div class="label">Console Output</div>
+        <div id="output">Initializing environment...</div>
+    </div>
+</main>
+
+<script>
+    const outputElement = document.getElementById("output");
+    const codeElement = document.getElementById("code");
+    const runButton = document.getElementById("run-btn");
+    const statusIndicator = document.getElementById("status");
+
+    let pyodide;
+
+    async function initPyodide() {
+        try {
+            pyodide = await loadPyodide();
+            outputElement.innerText = "Python Ready.\n";
+            statusIndicator.innerText = " [Ready]";
+            statusIndicator.className = "status ready";
+            runButton.disabled = false;
+        } catch (err) {
+            outputElement.innerText = "Error loading Pyodide: " + err;
+        }
+    }
+
+    async function runPython() {
+        if (!pyodide) return;
+
+        // Clear previous output
+        outputElement.innerHTML = "";
+        
+        // Redirect stdout to our div
+        pyodide.runPython(`
+            import sys
+            import io
+            sys.stdout = io.StringIO()
+        `);
+
+        const code = codeElement.value;
+
+        try {
+            // Execute code
+            let result = await pyodide.runPythonAsync(code);
+            
+            // Get captured stdout
+            const stdout = pyodide.runPython("sys.stdout.getvalue()");
+            
+            // Display stdout
+            if (stdout) {
+                outputElement.innerText += stdout;
+            }
+            
+            // Display result if it's not undefined
+            if (result !== undefined) {
+                outputElement.innerHTML += `<span style="color: #b5cea8">Result: ${result}</span>`;
+            }
+        } catch (err) {
+            outputElement.innerHTML += `<span class="error">${err}</span>`;
+        }
+    }
+
+    // Keyboard shortcut (Ctrl + Enter)
+    codeElement.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            runPython();
+        }
+    });
+
+    initPyodide();
+</script>
+
+</body>
+</html>
