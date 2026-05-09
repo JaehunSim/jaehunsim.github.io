@@ -1,38 +1,57 @@
-function preview() {
-    const params = new URLSearchParams(window.location.search);
-    let url = params.get('url');
-    if (!url) return;
-    
-    // 1. Convert GitHub blob URL to Raw URL
-    let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-
-    // 2. Add a Cache-Buster (Unique timestamp) to the URL
-    // This forces GitHub's CDN to treat it as a new request every time
-    const cacheBuster = "t=" + new Date().getTime();
-    rawUrl += (rawUrl.includes('?') ? '&' : '?') + cacheBuster;
-
-    // 3. Set fetch options to avoid browser cache
-    fetch(rawUrl, {
-        cache: "no-store", // Do not check the cache, do not update the cache
-        headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-        }
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-    })
-    .then(html => {
-        const frame = document.getElementById('previewFrame');
-        const doc = frame.contentWindow.document;
-        doc.open();
-        doc.write(html);
-        doc.close();
-    })
-    .catch(err => {
-        console.error(err);
-        alert('Error loading file. Make sure the URL is public and correct.');
-    });
-}
-preview();
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My GitHub HTML Previewer</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+        #controls { background: #333; color: white; padding: 10px; display: flex; gap: 10px; }
+        input { flex-grow: 1; padding: 5px; border-radius: 4px; border: none; }
+        button { cursor: pointer; padding: 5px 15px; background: #2ea44f; color: white; border: none; border-radius: 4px; }
+        iframe { width: 100%; height: calc(100vh - 50px); border: none; background: white; }
+    </style>
+</head>
+<body>
+    <iframe id="previewFrame"></iframe>
+    <script>
+      function preview() {
+          const params = new URLSearchParams(window.location.search);
+          let url = params.get('url');
+          if (!url) return;
+          
+          // 1. Convert GitHub blob URL to Raw URL
+          let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+      
+          // 2. Add a Cache-Buster (Unique timestamp) to the URL
+          // This forces GitHub's CDN to treat it as a new request every time
+          const cacheBuster = "t=" + new Date().getTime();
+          rawUrl += (rawUrl.includes('?') ? '&' : '?') + cacheBuster;
+      
+          // 3. Set fetch options to avoid browser cache
+          fetch(rawUrl, {
+              cache: "no-store", // Do not check the cache, do not update the cache
+              headers: {
+                  'Cache-Control': 'no-cache',
+                  'Pragma': 'no-cache'
+              }
+          })
+          .then(response => {
+              if (!response.ok) throw new Error('Network response was not ok');
+              return response.text();
+          })
+          .then(html => {
+              const frame = document.getElementById('previewFrame');
+              const doc = frame.contentWindow.document;
+              doc.open();
+              doc.write(html);
+              doc.close();
+          })
+          .catch(err => {
+              console.error(err);
+              alert('Error loading file. Make sure the URL is public and correct.');
+          });
+      }
+      preview();
+  
+    </script>
+</body>
+</html>
