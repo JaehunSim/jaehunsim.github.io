@@ -9,17 +9,17 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
+            display: flex;
+            justify-content: center;
             padding: 20px;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
+            background-color: white;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
         }
         h1 {
             color: #2c3e50;
@@ -27,109 +27,53 @@
             border-bottom: 2px solid #27ae60;
             padding-bottom: 10px;
         }
-        .category {
-            margin-top: 25px;
-        }
-        .category-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #27ae60;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .category-title::before {
-            content: "🍋";
-            margin-right: 10px;
-        }
         ul {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
             list-style-type: none;
             padding: 0;
         }
         li {
-            background: #f9f9f9;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border-left: 4px solid #e0e0e0;
+            background: #fff;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
             transition: transform 0.2s;
+            border-left: 5px solid #27ae60;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         li:hover {
-            transform: translateX(5px);
-            border-left-color: #27ae60;
-            background: #f0fff4;
+            transform: scale(1.03);
+            background-color: #f9fff9;
+        }
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        .fruit-name {
+            font-weight: 600;
+            color: #34495e;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Fresh Fruit Varieties</h1>
-
-    <div class="category">
-        <div class="category-title">Citrus Fruits</div>
-        <ul>
-            <li>Orange</li>
-            <li>Lemon</li>
-            <li>Lime</li>
-            <li>Grapefruit</li>
-            <li>Tangerine</li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <div class="category-title">Berries</div>
-        <ul>
-            <li>Strawberry</li>
-            <li>Blueberry</li>
-            <li>Raspberry</li>
-            <li>Blackberry</li>
-            <li>Cranberry</li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <div class="category-title">Tropical Fruits</div>
-        <ul>
-            <li>Mango</li>
-            <li>Pineapple</li>
-            <li>Papaya</li>
-            <li>Banana</li>
-            <li>Coconut</li>
-            <li>Kiwi</li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <div class="category-title">Pome Fruits</div>
-        <ul>
-            <li>Apple</li>
-            <li>Pear</li>
-            <li>Quince</li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <div class="category-title">Stone Fruits (Drupes)</div>
-        <ul>
-            <li>Peach</li>
-            <li>Cherry</li>
-            <li>Plum</li>
-            <li>Apricot</li>
-            <li>Nectarine</li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <div class="category-title">Melons</div>
-        <ul>
-            <li>Watermelon</li>
-            <li>Cantaloupe</li>
-            <li>Honeydew</li>
-        </ul>
-    </div>
+    <h1>Delicious Fruits</h1>
+    <ul>
+        <li><span class="emoji">🍎</span> <span class="fruit-name">Apple</span></li>
+        <li><span class="emoji">🍌</span> <span class="fruit-name">Banana</span></li>
+        <li><span class="emoji">🍓</span> <span class="fruit-name">Strawberry</span></li>
+        <li><span class="emoji">🍊</span> <span class="fruit-name">Orange</span></li>
+        <li><span class="emoji">🥭</span> <span class="fruit-name">Mango</span></li>
+        <li><span class="emoji">🍇</span> <span class="fruit-name">Grapes</span></li>
+        <li><span class="emoji">🍍</span> <span class="fruit-name">Pineapple</span></li>
+        <li><span class="emoji">🍉</span> <span class="fruit-name">Watermelon</span></li>
+        <li><span class="emoji">🥝</span> <span class="fruit-name">Kiwi</span></li>
+        <li><span class="emoji">🍒</span> <span class="fruit-name">Cherry</span></li>
+        <li><span class="emoji">🍑</span> <span class="fruit-name">Peach</span></li>
+        <li><span class="emoji">🍐</span> <span class="fruit-name">Pear</span></li>
+    </ul>
 </div>
 
 </body>
