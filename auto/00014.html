@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Web UI Alternatives - HTML Focus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: #3b82f6;
+        }
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <header class="max-w-6xl mx-auto mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+            OSS UI Tools for HTML Rendering
+        </h1>
+        <p class="text-gray-400 text-lg">If you want an experience like Claude's "Artifacts" or a built-in sandbox for HTML/JS previewing, these are the top open-source contenders.</p>
+    </header>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Lobe Chat -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-600 rounded-lg mr-4"><i class="fas fa-layer-group text-xl"></i></div>
+                    <h2 class="text-xl font-bold">Lobe Chat</h2>
+                </div>
+                <p class="text-gray-400 mb-4">Extremely polished UI. It supports a plugin system and features a <strong>Code Preview</strong> mode that renders HTML/CSS/JS directly in the chat window.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Modern UX/UI</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Artifact-like previews</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> PWA Support</li>
+                </ul>
+            </div>
+            <a href="https://github.com/lobehub/lobe-chat" target="_blank" class="block text-center py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition">View GitHub</a>
+        </div>
+
+        <!-- OpenCanvas -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-emerald-500/30">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-emerald-600 rounded-lg mr-4"><i class="fas fa-paint-brush text-xl"></i></div>
+                    <h2 class="text-xl font-bold">OpenCanvas</h2>
+                </div>
+                <p class="text-gray-400 mb-4">Developed by LangChain. It is explicitly built to mimic the <strong>Claude Artifacts</strong> experience, focusing on side-by-side editing and rendering of code/documents.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Specialized in Code/HTML</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Real-time preview panel</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> History versioning</li>
+                </ul>
+            </div>
+            <a href="https://github.com/langchain-ai/open-canvas" target="_blank" class="block text-center py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg font-medium transition">View GitHub</a>
+        </div>
+
+        <!-- Bolt.new / OpenHands -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-purple-500/30">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-purple-600 rounded-lg mr-4"><i class="fas fa-bolt text-xl"></i></div>
+                    <h2 class="text-xl font-bold">Bolt.new (OSS)</h2>
+                </div>
+                <p class="text-gray-400 mb-4">This is the ultimate tool for <strong>full-stack HTML/React rendering</strong>. It runs a full WebContainer in your browser to build and preview apps live.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Full environment sandbox</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Multi-file support</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Instant deployment links</li>
+                </ul>
+            </div>
+            <a href="https://github.com/stackblitz/bolt.new" target="_blank" class="block text-center py-2 bg-purple-600 hover:bg-purple-500 rounded-lg font-medium transition">View GitHub</a>
+        </div>
+
+        <!-- LibreChat -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-gray-700 rounded-lg mr-4"><i class="fas fa-comment-dots text-xl"></i></div>
+                    <h2 class="text-xl font-bold">LibreChat</h2>
+                </div>
+                <p class="text-gray-400 mb-4">A powerful alternative to ChatGPT. While general-purpose, it has a robust <strong>Code Interpreter</strong> and plugin system for rendering visualizations and HTML.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Enterprise grade Auth</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Plugin Architecture</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Multi-model support</li>
+                </ul>
+            </div>
+            <a href="https://github.com/danny-avila/LibreChat" target="_blank" class="block text-center py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition">View GitHub</a>
+        </div>
+
+        <!-- Chatbox -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-red-600 rounded-lg mr-4"><i class="fas fa-desktop text-xl"></i></div>
+                    <h2 class="text-xl font-bold">Chatbox</h2>
+                </div>
+                <p class="text-gray-400 mb-4">A desktop/web client that offers very clean code block management and simple <strong>web preview</strong> capabilities for quick HTML snippets.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Native Desktop Apps</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Local model support</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Simple & Fast</li>
+                </ul>
+            </div>
+            <a href="https://github.com/Bin-Huang/chatbox" target="_blank" class="block text-center py-2 bg-red-800 hover:bg-red-700 rounded-lg font-medium transition">View GitHub</a>
+        </div>
+
+        <!-- Open WebUI (Modified) -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-blue-400">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-400 rounded-lg mr-4"><i class="fas fa-cog text-xl"></i></div>
+                    <h2 class="text-xl font-bold">Open WebUI (Customized)</h2>
+                </div>
+                <p class="text-gray-400 mb-4">Don't switch yet! Open WebUI supports <strong>"Functions"</strong> and <strong>"Tools"</strong> where you can install community "Artifacts" filters that enable HTML rendering.</p>
+                <ul class="text-sm space-y-2 mb-6">
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Community Tooling</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Most features of any OSS</li>
+                    <li><i class="fas fa-check text-emerald-500 mr-2"></i> Self-host easy via Docker</li>
+                </ul>
+            </div>
+            <a href="https://openwebui.com/functions" target="_blank" class="block text-center py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-medium transition">Explore Functions</a>
+        </div>
+
+    </div>
+
+    <footer class="max-w-6xl mx-auto mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+        <p>Pro-tip: If you want 1:1 Claude Artifacts behavior, <strong>OpenCanvas</strong> is your best bet. If you want a full development suite, look at <strong>Bolt.new</strong>.</p>
+    </footer>
+
+</body>
+</html>
