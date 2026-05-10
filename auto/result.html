@@ -4,77 +4,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Fruits</title>
+    <title>Discover Yongin - Gyeonggi-do</title>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #e67e22;
+            --light: #f4f7f6;
+            --dark: #333;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 2px solid #27ae60;
-            padding-bottom: 10px;
-        }
-        ul {
-            list-style-type: none;
+            line-height: 1.6;
+            margin: 0;
             padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
         }
-        li {
-            background: #fff;
-            margin: 10px 0;
-            padding: 12px 15px;
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: -50px auto 50px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            border: 1px solid #eee;
+            padding: 20px;
             border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
             display: flex;
             align-items: center;
-            transition: transform 0.2s;
-            border-left: 5px solid #27ae60;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        li:hover {
-            transform: scale(1.03);
-            background-color: #f9fff9;
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        .emoji {
-            font-size: 1.5em;
-            margin-right: 15px;
+
+        .stats-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
         }
-        .fruit-name {
-            font-weight: 600;
-            color: #34495e;
+
+        .stats-table td:first-child {
+            font-weight: bold;
+            color: var(--primary);
+            width: 40%;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2.5rem; }
+            .container { margin-top: 0; border-radius: 0; }
         }
     </style>
 </head>
 <body>
 
+<header>
+    <div class="badge">Gyeonggi Province, South Korea</div>
+    <h1>Yongin-si (용인시)</h1>
+    <p>A vibrant "Special City" blending high-tech innovation with rich Korean cultural traditions.</p>
+</header>
+
 <div class="container">
-    <h1>Delicious Fruits</h1>
-    <ul>
-        <li><span class="emoji">🍎</span> <span class="fruit-name">Apple</span></li>
-        <li><span class="emoji">🍌</span> <span class="fruit-name">Banana</span></li>
-        <li><span class="emoji">🍓</span> <span class="fruit-name">Strawberry</span></li>
-        <li><span class="emoji">🍊</span> <span class="fruit-name">Orange</span></li>
-        <li><span class="emoji">🥭</span> <span class="fruit-name">Mango</span></li>
-        <li><span class="emoji">🍇</span> <span class="fruit-name">Grapes</span></li>
-        <li><span class="emoji">🍍</span> <span class="fruit-name">Pineapple</span></li>
-        <li><span class="emoji">🍉</span> <span class="fruit-name">Watermelon</span></li>
-        <li><span class="emoji">🥝</span> <span class="fruit-name">Kiwi</span></li>
-        <li><span class="emoji">🍒</span> <span class="fruit-name">Cherry</span></li>
-        <li><span class="emoji">🍑</span> <span class="fruit-name">Peach</span></li>
-        <li><span class="emoji">🍐</span> <span class="fruit-name">Pear</span></li>
-    </ul>
+    <section>
+        <h2>What is Yongin?</h2>
+        <p>
+            Yongin is a major metropolitan city located in the Gyeonggi Province of South Korea. Situated just south of Seoul, it is one of the most populous cities in the country, with over 1 million residents. It is uniquely categorized as a <strong>"Special City,"</strong> giving it more administrative autonomy than typical cities.
+        </p>
+    </section>
+
+    <div class="grid">
+        <!-- Culture Section -->
+        <div class="card">
+            <h3>🎢 Major Attractions</h3>
+            <p>Yongin is the tourism capital of the region, housing some of Korea's most famous landmarks:</p>
+            <ul>
+                <li><strong>Everland Resort:</strong> South Korea's largest and most popular theme park.</li>
+                <li><strong>Caribbean Bay:</strong> A massive world-class water park.</li>
+                <li><strong>Korean Folk Village:</strong> A living museum showcasing Joseon-era life and culture.</li>
+            </ul>
+        </div>
+
+        <!-- Economy Section -->
+        <div class="card">
+            <h3>💻 Tech & Economy</h3>
+            <p>A critical hub for the global semiconductor industry:</p>
+            <ul>
+                <li><strong>Samsung Electronics:</strong> Home to the massive Giheung Campus (Semiconductor research).</li>
+                <li><strong>SK Hynix:</strong> A new massive semiconductor cluster is currently under development.</li>
+                <li>Strategic location for logistics and tech startups.</li>
+            </ul>
+        </div>
+    </div>
+
+    <section style="margin-top: 40px;">
+        <h2>Key Statistics</h2>
+        <table class="stats-table">
+            <tr>
+                <td>Population</td>
+                <td>Approx. 1.1 million</td>
+            </tr>
+            <tr>
+                <td>Total Area</td>
+                <td>591.32 km²</td>
+            </tr>
+            <tr>
+                <td>City Slogan</td>
+                <td>"People-Centered Yongin"</td>
+            </tr>
+            <tr>
+                <td>Districts (Gu)</td>
+                <td>Cheoin-gu, Giheung-gu, Suji-gu</td>
+            </tr>
+            <tr>
+                <td>Education</td>
+                <td>Home to Dankook, Myongji, and Kyung Hee (Global) Universities</td>
+            </tr>
+        </table>
+    </section>
+
+    <section style="margin-top: 40px; background: #f9f9f9; padding: 20px; border-radius: 8px;">
+        <h3>Why Visit/Live There?</h3>
+        <p>
+            Yongin offers a high quality of life by balancing urban convenience with nature. While the <strong>Suji</strong> and <strong>Giheung</strong> districts are highly developed residential and commercial areas connected to the Seoul subway system, the <strong>Cheoin</strong> district offers more mountainous landscapes and recreational spaces.
+        </p>
+    </section>
 </div>
+
+<footer>
+    <p>Explore South Korea &copy; 2023 | Yongin City Profile</p>
+</footer>
 
 </body>
 </html>
