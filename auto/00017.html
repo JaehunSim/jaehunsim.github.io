@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Fruits</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #27ae60;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+            border-left: 5px solid #27ae60;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        li:hover {
+            transform: scale(1.03);
+            background-color: #f9fff9;
+        }
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        .fruit-name {
+            font-weight: 600;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Delicious Fruits</h1>
+    <ul>
+        <li><span class="emoji">🍎</span> <span class="fruit-name">Apple</span></li>
+        <li><span class="emoji">🍌</span> <span class="fruit-name">Banana</span></li>
+        <li><span class="emoji">🍓</span> <span class="fruit-name">Strawberry</span></li>
+        <li><span class="emoji">🍊</span> <span class="fruit-name">Orange</span></li>
+        <li><span class="emoji">🥭</span> <span class="fruit-name">Mango</span></li>
+        <li><span class="emoji">🍇</span> <span class="fruit-name">Grapes</span></li>
+        <li><span class="emoji">🍍</span> <span class="fruit-name">Pineapple</span></li>
+        <li><span class="emoji">🍉</span> <span class="fruit-name">Watermelon</span></li>
+        <li><span class="emoji">🥝</span> <span class="fruit-name">Kiwi</span></li>
+        <li><span class="emoji">🍒</span> <span class="fruit-name">Cherry</span></li>
+        <li><span class="emoji">🍑</span> <span class="fruit-name">Peach</span></li>
+        <li><span class="emoji">🍐</span> <span class="fruit-name">Pear</span></li>
+    </ul>
+</div>
+
+</body>
+</html>
