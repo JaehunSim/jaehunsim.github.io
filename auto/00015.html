@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2x2 Multiplication Worksheet Generator</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --border-color: #000;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        /* Controls Area - Hidden during print */
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .controls h2 { margin-top: 0; color: var(--primary-color); }
+
+        .input-group {
+            margin-bottom: 15px;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            width: 60px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover { background-color: #2980b9; }
+
+        button.print-btn { background-color: #27ae60; }
+
+        /* Worksheet Styling */
+        .worksheet-page {
+            background: white;
+            width: 8.5in;
+            min-height: 11in;
+            padding: 0.5in;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header-info div { margin-bottom: 10px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px 20px;
+        }
+
+        .problem-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 24px;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            padding: 10px;
+        }
+
+        .problem-number {
+            position: absolute;
+            top: 0;
+            left: 10px;
+            font-size: 14px;
+            font-family: sans-serif;
+            color: #666;
+        }
+
+        .numbers {
+            text-align: right;
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .operator {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .line {
+            border-bottom: 2px solid var(--border-color);
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .answer {
+            color: #e74c3c;
+            font-weight: bold;
+            visibility: hidden;
+        }
+
+        .show-answers .answer {
+            visibility: visible;
+        }
+
+        /* Print Settings */
+        @media print {
+            body { background: white; padding: 0; }
+            .controls { display: none; }
+            .worksheet-page { box-shadow: none; margin: 0; width: 100%; }
+            .answer { color: black; } /* Print answers in black if enabled */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>Multiplication Worksheet Maker</h2>
+        <div class="input-group">
+            <label>Number of Problems:</label>
+            <input type="number" id="problemCount" value="12" min="1" max="30">
+        </div>
+        <div class="input-group">
+            <label>
+                <input type="checkbox" id="toggleAnswers" onchange="updateWorksheet()"> Show Answers
+            </label>
+        </div>
+        <button onclick="generateWorksheet()">Generate New Problems</button>
+        <button class="print-btn" onclick="window.print()">Print Worksheet</button>
+    </div>
+
+    <div class="worksheet-page" id="worksheet">
+        <div class="header">
+            <div class="title">
+                <h1 style="margin:0">Multiplication Practice</h1>
+                <p>2-Digit by 2-Digit</p>
+            </div>
+            <div class="header-info">
+                <div>Name: __________________________</div>
+                <div>Date: __________________________</div>
+            </div>
+        </div>
+        
+        <div class="grid" id="problemGrid">
+            <!-- Problems will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        function generateRandom(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateWorksheet() {
+            const count = document.getElementById('problemCount').value;
+            const grid = document.getElementById('problemGrid');
+            grid.innerHTML = ''; // Clear previous
+
+            for (let i = 1; i <= count; i++) {
+                const num1 = generateRandom(10, 99);
+                const num2 = generateRandom(10, 99);
+                const answer = num1 * num2;
+
+                const problemHtml = `
+                    <div class="problem-container">
+                        <span class="problem-number">${i})</span>
+                        <div class="numbers">
+                            <div>${num1}</div>
+                            <div><span class="operator">×</span>${num2}</div>
+                            <div class="line"></div>
+                            <div class="answer">${answer}</div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += problemHtml;
+            }
+            updateWorksheet();
+        }
+
+        function updateWorksheet() {
+            const showAnswers = document.getElementById('toggleAnswers').checked;
+            const worksheet = document.getElementById('worksheet');
+            if (showAnswers) {
+                worksheet.classList.add('show-answers');
+            } else {
+                worksheet.classList.remove('show-answers');
+            }
+        }
+
+        // Initialize on load
+        window.onload = generateWorksheet;
+    </script>
+</body>
+</html>
