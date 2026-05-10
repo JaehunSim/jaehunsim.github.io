@@ -4,221 +4,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2x2 Multiplication Worksheet Generator</title>
+    <title>List of Fruits</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --border-color: #000;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
             padding: 20px;
-            background-color: #f4f4f9;
         }
-
-        /* Controls Area - Hidden during print */
-        .controls {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+        .container {
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .controls h2 { margin-top: 0; color: var(--primary-color); }
-
-        .input-group {
-            margin-bottom: 15px;
-            display: inline-block;
-            margin-right: 20px;
-        }
-
-        input[type="number"] {
-            padding: 8px;
-            width: 60px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover { background-color: #2980b9; }
-
-        button.print-btn { background-color: #27ae60; }
-
-        /* Worksheet Styling */
-        .worksheet-page {
-            background: white;
-            width: 8.5in;
-            min-height: 11in;
-            padding: 0.5in;
             margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid var(--border-color);
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #27ae60;
             padding-bottom: 10px;
-            margin-bottom: 30px;
         }
-
-        .header-info div { margin-bottom: 10px; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px 20px;
+        .category {
+            margin-top: 25px;
         }
-
-        .problem-container {
+        .category-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            font-size: 24px;
-            font-family: 'Courier New', Courier, monospace;
-            position: relative;
-            padding: 10px;
         }
-
-        .problem-number {
-            position: absolute;
-            top: 0;
-            left: 10px;
-            font-size: 14px;
-            font-family: sans-serif;
-            color: #666;
-        }
-
-        .numbers {
-            text-align: right;
-            display: inline-block;
-            line-height: 1.2;
-        }
-
-        .operator {
-            float: left;
+        .category-title::before {
+            content: "🍋";
             margin-right: 10px;
         }
-
-        .line {
-            border-bottom: 2px solid var(--border-color);
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 5px;
+        ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            list-style-type: none;
+            padding: 0;
         }
-
-        .answer {
-            color: #e74c3c;
-            font-weight: bold;
-            visibility: hidden;
+        li {
+            background: #f9f9f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border-left: 4px solid #e0e0e0;
+            transition: transform 0.2s;
         }
-
-        .show-answers .answer {
-            visibility: visible;
-        }
-
-        /* Print Settings */
-        @media print {
-            body { background: white; padding: 0; }
-            .controls { display: none; }
-            .worksheet-page { box-shadow: none; margin: 0; width: 100%; }
-            .answer { color: black; } /* Print answers in black if enabled */
+        li:hover {
+            transform: translateX(5px);
+            border-left-color: #27ae60;
+            background: #f0fff4;
         }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <h2>Multiplication Worksheet Maker</h2>
-        <div class="input-group">
-            <label>Number of Problems:</label>
-            <input type="number" id="problemCount" value="12" min="1" max="30">
-        </div>
-        <div class="input-group">
-            <label>
-                <input type="checkbox" id="toggleAnswers" onchange="updateWorksheet()"> Show Answers
-            </label>
-        </div>
-        <button onclick="generateWorksheet()">Generate New Problems</button>
-        <button class="print-btn" onclick="window.print()">Print Worksheet</button>
+<div class="container">
+    <h1>Fresh Fruit Varieties</h1>
+
+    <div class="category">
+        <div class="category-title">Citrus Fruits</div>
+        <ul>
+            <li>Orange</li>
+            <li>Lemon</li>
+            <li>Lime</li>
+            <li>Grapefruit</li>
+            <li>Tangerine</li>
+        </ul>
     </div>
 
-    <div class="worksheet-page" id="worksheet">
-        <div class="header">
-            <div class="title">
-                <h1 style="margin:0">Multiplication Practice</h1>
-                <p>2-Digit by 2-Digit</p>
-            </div>
-            <div class="header-info">
-                <div>Name: __________________________</div>
-                <div>Date: __________________________</div>
-            </div>
-        </div>
-        
-        <div class="grid" id="problemGrid">
-            <!-- Problems will be injected here -->
-        </div>
+    <div class="category">
+        <div class="category-title">Berries</div>
+        <ul>
+            <li>Strawberry</li>
+            <li>Blueberry</li>
+            <li>Raspberry</li>
+            <li>Blackberry</li>
+            <li>Cranberry</li>
+        </ul>
     </div>
 
-    <script>
-        function generateRandom(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+    <div class="category">
+        <div class="category-title">Tropical Fruits</div>
+        <ul>
+            <li>Mango</li>
+            <li>Pineapple</li>
+            <li>Papaya</li>
+            <li>Banana</li>
+            <li>Coconut</li>
+            <li>Kiwi</li>
+        </ul>
+    </div>
 
-        function generateWorksheet() {
-            const count = document.getElementById('problemCount').value;
-            const grid = document.getElementById('problemGrid');
-            grid.innerHTML = ''; // Clear previous
+    <div class="category">
+        <div class="category-title">Pome Fruits</div>
+        <ul>
+            <li>Apple</li>
+            <li>Pear</li>
+            <li>Quince</li>
+        </ul>
+    </div>
 
-            for (let i = 1; i <= count; i++) {
-                const num1 = generateRandom(10, 99);
-                const num2 = generateRandom(10, 99);
-                const answer = num1 * num2;
+    <div class="category">
+        <div class="category-title">Stone Fruits (Drupes)</div>
+        <ul>
+            <li>Peach</li>
+            <li>Cherry</li>
+            <li>Plum</li>
+            <li>Apricot</li>
+            <li>Nectarine</li>
+        </ul>
+    </div>
 
-                const problemHtml = `
-                    <div class="problem-container">
-                        <span class="problem-number">${i})</span>
-                        <div class="numbers">
-                            <div>${num1}</div>
-                            <div><span class="operator">×</span>${num2}</div>
-                            <div class="line"></div>
-                            <div class="answer">${answer}</div>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += problemHtml;
-            }
-            updateWorksheet();
-        }
+    <div class="category">
+        <div class="category-title">Melons</div>
+        <ul>
+            <li>Watermelon</li>
+            <li>Cantaloupe</li>
+            <li>Honeydew</li>
+        </ul>
+    </div>
+</div>
 
-        function updateWorksheet() {
-            const showAnswers = document.getElementById('toggleAnswers').checked;
-            const worksheet = document.getElementById('worksheet');
-            if (showAnswers) {
-                worksheet.classList.add('show-answers');
-            } else {
-                worksheet.classList.remove('show-answers');
-            }
-        }
-
-        // Initialize on load
-        window.onload = generateWorksheet;
-    </script>
 </body>
 </html>
