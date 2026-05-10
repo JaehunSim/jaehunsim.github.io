@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오로팍스(OHROPAX) - 당신만의 고요한 시간</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0046ad; /* 오로팍스 블루 */
+            --accent-color: #ffcc00;  /* 오로팍스 옐로우 */
+            --text-dark: #333;
+            --text-light: #f4f4f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #fff;
+        }
+
+        /* Navigation */
+        nav {
+            background: #fff;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 70, 173, 0.8), rgba(0, 70, 173, 0.8)), 
+                        url('https://images.unsplash.com/photo-1511295742364-917e70331903?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .btn-main {
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            padding: 15px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 50px 10%;
+            background: #f9f9f9;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-card i {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Product Showcase */
+        .products {
+            padding: 80px 10%;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .product-item {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #999;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* CTA Section */
+        .cta-bottom {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        footer {
+            background: #222;
+            color: #888;
+            padding: 40px 10%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .features { padding: 30px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">OHROPAX</div>
+        <div>
+            <a href="#products" style="text-decoration: none; color: var(--text-dark); margin-left: 20px;">제품보기</a>
+            <a href="#about" style="text-decoration: none; color: var(--text-dark); margin-left: 20px;">브랜드 스토리</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>당신이 기다려온 완벽한 정적</h1>
+        <p>110년 전통의 독일 프리미엄 귀마개 오로팍스.<br>층간소음, 코골이, 집중력이 필요한 모든 순간을 위해 설계되었습니다.</p>
+        <a href="#products" class="btn-main">지금 할인된 가격으로 구매하기</a>
+    </header>
+
+    <section class="section-title">
+        <h2>왜 오로팍스인가요?</h2>
+    </section>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>강력한 소음 차단</h3>
+            <p>독일의 정밀한 기술력으로 일상의 소음을 최대 35dB까지 차단하여 깊은 숙면을 돕습니다.</p>
+        </div>
+        <div class="feature-card">
+            <h3>독보적인 편안함</h3>
+            <p>체온에 반응하는 부드러운 소재로 장시간 착용해도 귀가 아프지 않습니다.</p>
+        </div>
+        <div class="feature-card">
+            <h3>안전한 소재</h3>
+            <p>피부 저자극 테스트를 완료한 무독성 소재로 민감한 피부도 안심하고 사용하세요.</p>
+        </div>
+    </div>
+
+    <section class="products" id="products">
+        <div class="section-title">
+            <h2>베스트 셀러 라인업</h2>
+        </div>
+        <div class="product-grid">
+            <div class="product-item">
+                <div class="product-img">OHROPAX Classic (Wax)</div>
+                <h3>오로팍스 클래식 (왁스)</h3>
+                <p>오리지널의 힘. 귀 모양에 딱 맞게 성형되는 최고의 차음력.</p>
+                <p class="price">₩12,900</p>
+                <a href="#" class="btn-main" style="padding: 10px 20px; font-size: 0.9rem;">담기</a>
+            </div>
+            <div class="product-item">
+                <div class="product-img">OHROPAX Soft (Foam)</div>
+                <h3>오로팍스 소프트 (폼)</h3>
+                <p>부드러운 폴리우레탄 소재. 예민한 분들을 위한 데일리 아이템.</p>
+                <p class="price">₩9,900</p>
+                <a href="#" class="btn-main" style="padding: 10px 20px; font-size: 0.9rem;">담기</a>
+            </div>
+            <div class="product-item">
+                <div class="product-img">OHROPAX Silicon</div>
+                <h3>오로팍스 실리콘</h3>
+                <p>수영이나 샤워 시 완벽한 방수와 소음 차단을 동시에.</p>
+                <p class="price">₩15,500</p>
+                <a href="#" class="btn-main" style="padding: 10px 20px; font-size: 0.9rem;">담기</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-bottom">
+        <h2>오늘 밤, 소음 없는 휴식을 선물하세요</h2>
+        <p style="margin-bottom: 30px;">첫 구매 고객 대상 10% 할인 쿠폰 증정 중</p>
+        <a href="#" class="btn-main" style="background: white;">쿠폰 받고 구매하기</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 OHROPAX Korea. All Rights Reserved. | 독일 오로팍스 공식 수입원</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">고객센터: 1588-0000 | 평일 10:00 - 17:00</p>
+    </footer>
+
+</body>
+</html>
