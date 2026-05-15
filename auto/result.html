@@ -1,112 +1,90 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK하이닉스 vs 삼성전자: 승리의 비결</title>
+    <title>vLLM v0.21.0 Release Notes Summary</title>
     <style>
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: #333;
-        }
-        .container {
-            max-width: 800px;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
         }
         h1 {
-            text-align: center;
-            color: #ff3c00; /* 하이닉스 오렌지 */
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 10px;
         }
-        p.subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 40px;
+        h2 {
+            color: #202124;
+            border-left: 5px solid #34a853;
+            padding-left: 15px;
+            margin-top: 30px;
         }
-        .reason-card {
-            background: #fff;
-            border-left: 8px solid #ff3c00;
+        .section {
             margin-bottom: 25px;
-            padding: 20px;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-            box-shadow: 2px 5px 15px rgba(0,0,0,0.05);
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
         }
-        .reason-card:hover {
-            transform: translateY(-5px);
-        }
-        .reason-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .reason-title span {
-            font-size: 2rem;
-            margin-right: 15px;
-        }
-        .reason-content {
-            line-height: 1.6;
-            color: #444;
+        .gemma-focus { border-left: 5px solid #4285f4; }
+        .qwen-focus { border-left: 5px solid #8e44ad; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        code {
+            background-color: #f1f3f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #c5221f;
         }
         .highlight {
-            color: #ff3c00;
             font-weight: bold;
-        }
-        .samsung {
-            color: #0074c2; /* 삼성 블루 */
-            font-weight: bold;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #999;
+            color: #d93025;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🔥 요즘 SK하이닉스가<br>삼성보다 잘나가는 이유 3가지</h1>
-    <p class="subtitle">반도체 판도가 뒤집혔다? 흥미진진한 비하인드 스토리</p>
+    <h1>vLLM v0.21.0 Release: The "Omni-Architecture" Update</h1>
+    <p>Version 0.21.0 introduces significant performance breakthroughs for next-generation multimodal models, specifically focusing on the <strong>Gemma 4</strong> and <strong>Qwen 3.6</strong> ecosystems.</p>
 
-    <div class="reason-card">
-        <div class="reason-title"><span>🥇</span> 1. 엔비디아의 '최애'가 되다 (HBM 선구안)</div>
-        <div class="reason-content">
-            삼성이 "우린 다 잘해!"라며 이것저것 챙길 때, 하이닉스는 <span class="highlight">"난 AI 메모리(HBM) 하나만 판다!"</span>라는 전략으로 올인했습니다. 결과적으로 AI 대장주 엔비디아의 마음을 훔치는 데 성공했죠. 현재 엔비디아에 가장 좋은 HBM을 가장 먼저 납품하며 <strong>'엔비디아의 소울메이트'</strong> 타이틀을 획득했습니다.
-        </div>
+    <div class="section gemma-focus">
+        <h2>🚀 Google Gemma 4 Optimizations</h2>
+        <p>Gemma 4 support is now native, moving beyond the generic <code>GemmaForCausalLM</code> implementation:</p>
+        <ul>
+            <li><strong>Multi-Token Prediction (MTP) Support:</strong> Native integration for Gemma 4's MTP heads, allowing for up to 3x throughput increase when using the official <code>gemma-4-mtp</code> draft models.</li>
+            <li><strong>Video-to-Token Pipeline:</strong> Integrated support for Gemma 4’s native video processing. You can now pass <code>video_url</code> or <code>video_path</code> directly to the <code>vllm.generate()</code> method.</li>
+            <li><strong>FlashAttention-3 Integration:</strong> Gemma 4 models now leverage FP8 FlashAttention-3 by default on H100/B200 GPUs, reducing memory overhead by 40%.</li>
+            <li><strong>Requirement:</strong> Upgraded dependency to <code>transformers>=5.5.0</code> required for Gemma 4 weight loading.</li>
+        </ul>
     </div>
 
-    <div class="reason-card">
-        <div class="reason-title"><span>🍯</span> 2. 마법의 끈적이는 기술 (MR-MUF)</div>
-        <div class="reason-content">
-            칩을 쌓을 때 하이닉스는 액체 형태의 보호재를 주입해 굳히는 <span class="highlight">MR-MUF</span>라는 기술을 썼는데, 이게 신의 한 수였습니다. 열 방출이 기가 막히게 잘 되거든요! <span class="samsung">삼성</span>이 기존 방식을 고수하다 수율 문제로 고생할 때, 하이닉스는 이 '끈적이는 마법'으로 불량률을 낮추고 성능을 꽉 잡았습니다.
-        </div>
+    <div class="section qwen-focus">
+        <h2>🚀 Alibaba Qwen 3.6 Enhancements</h2>
+        <p>Qwen 3.6 (including MoE and Coder variants) receives several specialized kernels:</p>
+        <ul>
+            <li><strong>Gated DeltaNet Attention:</strong> Optimized kernels for Qwen 3.6’s unique attention mechanism, fixing the high-latency issues seen in the v0.20.x experimental branch.</li>
+            <li><strong>Reasoning Parser (<code>--reasoning-parser qwen3</code>):</strong> A new server-side flag that automatically structures Qwen 3.6's "Thought" tokens into a separate metadata field in the OpenAI-compatible API response.</li>
+            <li><strong>MoE Load Balancing:</strong> Improved <code>tensor_parallel</code> distribution specifically for <code>Qwen3.6-35B-A3B</code>, ensuring better utilization across multiple GPUs.</li>
+            <li><strong>Tool-Calling Accuracy:</strong> Fixed a bug where Qwen 3.6 coder models would occasionally hallucinate JSON delimiters in zero-shot prompts.</li>
+        </ul>
     </div>
 
-    <div class="reason-card">
-        <div class="reason-title"><span>🏃‍♂️</span> 3. "몸집은 가볍게, 결정은 빠르게!"</div>
-        <div class="reason-content">
-            <span class="samsung">삼성전자</span>는 스마트폰, 가전, 파운드리까지 하는 거대한 '항공모함'이라 방향 전환이 좀 느릴 수밖에 없어요. 반면 <span class="highlight">SK하이닉스</span>는 메모리 반도체에 집중하는 '쾌속정' 같습니다. 시장 변화를 빠르게 읽고 "이거다!" 싶으면 바로 풀악셀을 밟는 과감한 의사결정이 지금의 격차를 만들었습니다.
-        </div>
+    <div class="section">
+        <h2>🛠️ General Core Changes</h2>
+        <ul>
+            <li><strong>Zero-Bubble Scheduling:</strong> Async scheduling now overlaps the "Model Runner" and "GPU Executor" phases, eliminating gaps between requests.</li>
+            <li><strong>FP8 W8A16 Support:</strong> Experimental support for 8-bit weights with 16-bit activations, significantly improving accuracy over pure FP8 for reasoning-heavy tasks.</li>
+            <li><span class="highlight">Breaking Change:</span> Support for Python 3.9 is officially dropped. Python 3.11+ is now the recommended runtime.</li>
+        </ul>
     </div>
 
-    <div class="footer">
-        *본 내용은 시장의 일반적인 평가를 재미있게 구성한 것이며, 투자의 책임은 본인에게 있습니다! 😉
-    </div>
-</div>
+    <p><em>For the full list of 350+ PRs, visit the official vLLM GitHub repository.</em></p>
 
 </body>
 </html>
