@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기후 비교: 성남시 vs. 실리콘밸리</title>
+  
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            seongnam: {
+              light: '#eff6ff',
+              brand: '#2563eb',
+              dark: '#1e3a8a',
+            },
+            valley: {
+              light: '#fffbeb',
+              brand: '#d97706',
+              dark: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Alpine.js CDN (Deferred) -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen" 
+      x-data="climateApp()" 
+      x-init="init()">
+
+  <!-- Header Section -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-blue-50 text-blue-600 rounded-xl">
+          <i data-lucide="cloud-sun" class="w-8 h-8"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 tracking-tight" x-text="t('title')"></h1>
+          <p class="text-xs text-slate-500 font-medium" x-text="t('subtitle')"></p>
+        </div>
+      </div>
+      
+      <!-- Interactive Toggles (Language & Unit) -->
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- i18n Toggle Button -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+          <button @click="changeLang('ko')" 
+                  :class="lang === 'ko' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                  class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+            한국어
+          </button>
+          <button @click="changeLang('en')" 
+                  :class="lang === 'en' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                  class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+            English
+          </button>
+        </div>
+
+        <!-- Temperature Unit Toggle -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+          <button @click="changeUnit('C')" 
+                  :class="unit === 'C' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                  class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+            °C
+          </button>
+          <button @click="changeUnit('F')" 
+                  :class="unit === 'F' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                  class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+            °F
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Location Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Seongnam Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-50 rounded-full opacity-50 pointer-events-none"></div>
+        <div>
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-blue-50 text-blue-700 rounded-full mb-3">
+                <i data-lucide="globe" class="w-3.5 h-3.5"></i> <span x-text="lang === 'ko' ? '동아시아' : 'East Asia'"></span>
+              </span>
+              <h2 class="text-2xl font-bold text-slate-900" x-text="t('seongnam')"></h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block font-bold uppercase tracking-wider" x-text="t('classification')"></span>
+              <span class="text-xs font-bold text-slate-700">Dwa / Cwa</span>
+            </div>
+          </div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed" x-text="t('seongnamDesc')"></p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 mt-6">
+          <div>
+            <p class="text-xs text-slate-400 font-medium" x-text="t('extremeWinter')"></p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(-7) + ' ~ ' + formatTemp(3)"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-medium" x-text="t('extremeSummer')"></p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(22) + ' ~ ' + formatTemp(31)"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Silicon Valley Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-50 rounded-full opacity-50 pointer-events-none"></div>
+        <div>
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-amber-50 text-amber-700 rounded-full mb-3">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span x-text="lang === 'ko' ? '캘리포니아, 미국' : 'California, USA'"></span>
+              </span>
+              <h2 class="text-2xl font-bold text-slate-900" x-text="t('valley')"></h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block font-bold uppercase tracking-wider" x-text="t('classification')"></span>
+              <span class="text-xs font-bold text-slate-700">Csb (Mediterranean)</span>
+            </div>
+          </div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed" x-text="t('valleyDesc')"></p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 mt-6">
+          <div>
+            <p class="text-xs text-slate-400 font-medium" x-text="t('extremeWinter')"></p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(4) + ' ~ ' + formatTemp(15)"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-medium" x-text="t('extremeSummer')"></p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(13) + ' ~ ' + formatTemp(27)"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Temperature Curve Trend Map Chart -->
+    <section class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900" x-text="t('chartTitle')"></h3>
+          <p class="text-xs text-slate-500" x-text="t('chartSubtitle')"></p>
+        </div>
+      </div>
+      <div class="relative w-full h-[320px] sm:h-[400px]">
+        <canvas id="tempChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Deep Metric Sheet Table -->
+    <section class="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-900" x-text="t('metricTitle')"></h3>
+        <p class="text-xs text-slate-500" x-text="t('metricSubtitle')"></p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/70 border-b border-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <th class="p-4" x-text="t('colMetric')"></th>
+              <th class="p-4 border-l border-slate-100/50" x-text="t('seongnam')"></th>
+              <th class="p-4 border-l border-slate-100/50" x-text="t('colValley')"></th>
+            </tr>
+          </thead>
+          <tbody class="text-sm divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowHottest')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-slate-900" x-text="t('august')"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('avg') + ': ' + formatTemp(22) + ' ~ ' + formatTemp(31)"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-slate-900" x-text="t('augSept')"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('avg') + ': ' + formatTemp(13) + ' ~ ' + formatTemp(27)"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowColdest')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-slate-900" x-text="t('january')"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('avg') + ': ' + formatTemp(-7) + ' ~ ' + formatTemp(3)"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-slate-900" x-text="t('decJan')"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('avg') + ': ' + formatTemp(4) + ' ~ ' + formatTemp(15)"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowPrecip')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-blue-600">~1,281 mm</span> (50.4 in)<br>
+                <span class="text-xs text-slate-500" x-text="t('seongnamPrecipDetail')"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-bold text-amber-600">~368 mm</span> (14.5 in)<br>
+                <span class="text-xs text-slate-500" x-text="t('valleyPrecipDetail')"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowPattern')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '동아시아 계절풍 (장마)' : 'East Asian Monsoon'"></span><br>
+                <span class="text-xs text-slate-500 leading-relaxed block mt-1" x-text="t('seongnamPatternDetail')"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '겨울철 한대 전선 집중' : 'Winter Storm Tracks'"></span><br>
+                <span class="text-xs text-slate-500 leading-relaxed block mt-1" x-text="t('valleyPatternDetail')"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowSnow')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '주기적인 겨울 강설' : 'Regular winter snowfall'"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('seongnamSnowDetail')"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '매우 드묾 / 없음' : 'Extremely Rare / None'"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('valleySnowDetail')"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-slate-900" x-text="t('rowHumidity')"></td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '매우 유동적인 대기 습도' : 'Highly Variable'"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('seongnamHumidityDetail')"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-slate-800" x-text="lang === 'ko' ? '안정적인 쾌적 상태 유지' : 'Consistently Moderate'"></span><br>
+                <span class="text-xs text-slate-500" x-text="t('valleyHumidityDetail')"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Dynamic Segmental Seasonal Cards Grid -->
+    <section class="space-y-4">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900" x-text="t('seasonsTitle')"></h3>
+        <p class="text-xs text-slate-500" x-text="t('seasonsSubtitle')"></p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Winter -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-sky-50 text-sky-600 rounded-xl">
+              <i data-lucide="snowflake" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900"><span x-text="t('winter')"></span> <span class="text-xs font-normal text-slate-400">(12~2월 / Dec–Feb)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]" x-text="t('seongnam')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('winterSeongnam')"></p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]" x-text="t('valley')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('winterValley')"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spring -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+              <i data-lucide="flower" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900"><span x-text="t('spring')"></span> <span class="text-xs font-normal text-slate-400">(3~5월 / Mar–May)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]" x-text="t('seongnam')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('springSeongnam')"></p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]" x-text="t('valley')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('springValley')"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summer -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-amber-50 text-amber-500 rounded-xl">
+              <i data-lucide="sun" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900"><span x-text="t('summer')"></span> <span class="text-xs font-normal text-slate-400">(6~8월 / Jun–Aug)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]" x-text="t('seongnam')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('summerSeongnam')"></p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]" x-text="t('valley')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('summerValley')"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autumn -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-orange-50 text-orange-600 rounded-xl">
+              <i data-lucide="leaf" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900"><span x-text="t('autumn')"></span> <span class="text-xs font-normal text-slate-400">(9~11월 / Sep–Nov)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]" x-text="t('seongnam')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('autumnSeongnam')"></p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]" x-text="t('valley')"></p>
+              <p class="text-slate-600 mt-1" x-text="t('autumnValley')"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-400">
+    <p x-text="t('footer')"></p>
+  </footer>
+
+  <script>
+    // i18n Data Store
+    const i18n = {
+      ko: {
+        title: "기후 비교 분석",
+        subtitle: "대한민국 성남시 vs. 미국 실리콘밸리 (써니베일, 마운틴뷰, 팔로알토)",
+        seongnam: "대한민국 성남시",
+        valley: "실리콘밸리",
+        seongnamDesc: "겨울철 시베리아 고기압과 여름철 동아시아 몬순의 영향을 강하게 받습니다. 춥고 건조한 겨울 바람부터 무덥고 습한 장마철까지 네 계절의 변화가 매우 뚜렷합니다.",
+        valleyDesc: "써니베일, 마운틴뷰, 팔로알토를 포함하는 샌프란시스코 반도 지역입니다. 태평양과 베이의 영향을 받아 연중 매우 온화하며, 건조한 여름과 비가 내리는 겨울이 특징입니다.",
+        classification: "기후 구분",
+        extremeWinter: "겨울철 분포 평균",
+        extremeSummer: "여름철 분포 평균",
+        chartTitle: "월별 온도 변동 추이",
+        chartSubtitle: "두 기후대 간의 연간 평균 온도 비교 차트",
+        metricTitle: "상세 기후 지표 비교",
+        metricSubtitle: "지리적 조건에 따른 고정 기상 정보 데이터",
+        colMetric: "구분 지표",
+        colValley: "실리콘밸리 (써니베일 / 마운틴뷰 / 팔로알토)",
+        rowHottest: "가장 더운 달",
+        rowColdest: "가장 추운 달",
+        rowPrecip: "연간 강수량",
+        rowPattern: "강수 유형 패턴",
+        rowSnow: "강설 특징",
+        rowHumidity: "상대 습도 경향",
+        august: "8월",
+        january: "1월",
+        decJan: "12월 ~ 1월",
+        augSept: "8월 ~ 9월",
+        seongnamPrecipDetail: "여름 장마철에 연간 강수의 60% 이상 집중",
+        valleyPrecipDetail: "겨울 전선 영향 시기에 거의 모든 강수가 집중",
+        seongnamPatternDetail: "여름철 몬순(장마); 7월 단일 월에 평균 324mm 집중 강수",
+        valleyPatternDetail: "지중해성 기후; 여름철 건기 상태(6~9월 평균 강수량 2.5mm 미만)",
+        seongnamSnowDetail: "겨울철 정기적 강설 활동 (12월~2월 집중 적설 형성)",
+        valleySnowDetail: "눈을 볼 수 없음 (평지 최저 기온이 결빙 수준으로 떨어지지 않음)",
+        seongnamHumidityDetail: "고도로 가변적; 여름 몬순 기간 중 고온다습(80% 상회)으로 불쾌지수 높음",
+        valleyHumidityDetail: "상시 안정적인 수준; 여름 오후에는 쾌적하게 건조(40%~50%)",
+        avg: "평균",
+        to: "에서",
+        seasonsTitle: "분기별 계절 특징 분석",
+        seasonsSubtitle: "도시별 순환 주기에 따른 실제 기후 특성",
+        winter: "겨울",
+        spring: "봄",
+        summer: "여름",
+        autumn: "가을",
+        winterSeongnam: "시베리아 기단 영향으로 영하로 떨어지는 매서운 한파와 건조한 바람이 특징입니다. 주기적으로 눈이 내립니다.",
+        winterValley: "온화하고 녹음이 푸르러지며 겨울비가 주로 내립니다. 매서운 영하 날씨나 결빙 현상은 희박합니다.",
+        springSeongnam: "기온이 가파르게 상승하며 봄꽃이 개화합니다. 야외 활동에 최적이지만 건조한 대기와 황사의 영향이 있습니다.",
+        springValley: "화창하고 쾌적합니다. 겨울비가 마감되며 낮 기온이 서서히 올라 쾌적한 20도 안팎을 기록합니다.",
+        summerSeongnam: "고온다습한 북태평양 기단 하에서 다량의 비가 쏟아지는 장마 시기입니다. 체감 온도가 높습니다.",
+        summerValley: "강렬한 일사량과 달리 바닷바람(Marine Layer)의 유입과 극도로 낮은 대기 습도로 인해 끈적임이 없고 상쾌합니다.",
+        autumnSeongnam: "가장 맑은 하늘을 선보입니다. 고기압 기단의 영향으로 매우 쾌적하지만 후반기로 갈수록 한기가 빠르게 누적됩니다.",
+        autumnValley: "늦더위가 유지되어 9월까지 높은 온도를 보입니다. 점차 서늘해지며 11월 말부터 온화한 겨울비가 찾아옵니다.",
+        footer: "본 기후 비교 차트는 장기 누적 메트릭 통계 자료를 기반으로 정형화되었습니다.",
+        chartLabelSeongnamHigh: "성남 최고 기온",
+        chartLabelSeongnamLow: "성남 최저 기온",
+        chartLabelValleyHigh: "실리콘밸리 최고 기온",
+        chartLabelValleyLow: "실리콘밸리 최저 기온"
+      },
+      en: {
+        title: "Climate Comparison Analysis",
+        subtitle: "Seongnam, South Korea vs. Silicon Valley, CA (Sunnyvale, Mountain View, Palo Alto)",
+        seongnam: "Seongnam, South Korea",
+        valley: "Silicon Valley",
+        seongnamDesc: "Influenced heavily by the Siberian High in winter and the East Asian Monsoon in summer. Features four dramatically distinct seasons ranging from freezing, dry winter winds to hot, tropical, and heavily wet summer periods.",
+        valleyDesc: "Covers Sunnyvale, Mountain View, and Palo Alto on the SF Peninsula. Strongly moderated by the Pacific Ocean and SF Bay. Characterized by exceptional thermal stability, dry summers, and mild winters.",
+        classification: "Classification",
+        extremeWinter: "Winter Distribution Avg",
+        extremeSummer: "Summer Distribution Avg",
+        chartTitle: "Monthly Temperature Fluctuations",
+        chartSubtitle: "Year-round average temperature trajectory between two regions",
+        metricTitle: "Detailed Climate Metrics",
+        metricSubtitle: "Long-term regional statistical values",
+        colMetric: "Key Parameter",
+        colValley: "Silicon Valley (Sunnyvale / MV / Palo Alto)",
+        rowHottest: "Hottest Month",
+        rowColdest: "Coldest Month",
+        rowPrecip: "Annual Precipitation",
+        rowPattern: "Precipitation Pattern",
+        rowSnow: "Snowfall Dynamics",
+        rowHumidity: "Relative Humidity Trend",
+        august: "August",
+        january: "January",
+        decJan: "December ~ January",
+        augSept: "August ~ September",
+        seongnamPrecipDetail: "Over 60% of annual rainfall is concentrated in the summer monsoon",
+        valleyPrecipDetail: "Nearly all precipitation falls during winter storm tracks",
+        seongnamPatternDetail: "East Asian Monsoon (*Jangma*); July alone experiences an average of 324 mm of rain",
+        valleyPatternDetail: "Mediterranean cycle; completely dry summers (June-Sept averages < 2.5 mm)",
+        seongnamSnowDetail: "Regular annual winter snowfall (most accumulation from Dec to Feb)",
+        valleySnowDetail: "Almost never falls (valley ground temperatures consistently stay above freezing)",
+        seongnamHumidityDetail: "Extremely variable; uncomfortably muggy and sticky (80%+) in July/August",
+        valleyHumidityDetail: "Consistently moderate; dry, comfortable summer afternoons (40%~50%)",
+        avg: "Avg",
+        to: "to",
+        seasonsTitle: "Seasonal Cycles Analysis",
+        seasonsSubtitle: "Quarterly transitions and regional weather features",
+        winter: "Winter",
+        spring: "Spring",
+        summer: "Summer",
+        autumn: "Autumn",
+        winterSeongnam: "Freezing, dry, and windy under continental high-pressure systems. Regular frosts and clear snowfalls are common.",
+        winterValley: "Cool, moist, and green. Frequent light rainstorms but freeze indexes are rare on the valley floor.",
+        springSeongnam: "Rapid warm transition with cherry blossoms. Pleasant, but occasionally accompanied by desert dust wind.",
+        springValley: "Beautiful, clear, and exceptionally comfortable. Rains quickly dissipate to stable 70°F (21°C) days.",
+        summerSeongnam: "Hot, humid, and stormy. High heat indexes and frequent heavy monsoon rains define the season.",
+        summerValley: "Warm, completely rainless, and sunny. Low humidity levels and cool coastal ocean breezes keep evenings crisp.",
+        autumnSeongnam: "Clean blue skies and spectacular autumn foliage. Dry, refreshing air, with temperatures cooling rapidly in late autumn.",
+        autumnValley: "Late-summer warmth lasts into October (often the warmest period). Transitions gradually to light winter rain in late November.",
+        footer: "This climate comparison dataset is structured based on long-term historical meteorological stats.",
+        chartLabelSeongnamHigh: "Seongnam Max Temp",
+        chartLabelSeongnamLow: "Seongnam Min Temp",
+        chartLabelValleyHigh: "Silicon Valley Max Temp",
+        chartLabelValleyLow: "Silicon Valley Min Temp"
+      }
+    };
+
+    // Raw temperature database in Celsius
+    const rawData = {
+      months_ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+      months_en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      seongnam: {
+        high: [3, 6, 11, 18, 23, 27, 29, 31, 26, 20, 12, 5],
+        low: [-7, -4, 1, 7, 13, 18, 22, 22, 16, 9, 2, -5]
+      },
+      valley: {
+        high: [15, 17, 19, 21, 23, 26, 27, 27, 27, 24, 18, 15],
+        low: [4, 6, 7, 8, 10, 12, 13, 13, 13, 10, 7, 4]
+      }
+    };
+
+    let weatherChartInstance;
+
+    function getConvertedDataset(unit) {
+      const convert = (c) => unit === 'F' ? Math.round(c * 1.8 + 32) : c;
+      return {
+        seongnamHigh: rawData.seongnam.high.map(convert),
+        seongnamLow: rawData.seongnam.low.map(convert),
+        valleyHigh: rawData.valley.high.map(convert),
+        valleyLow: rawData.valley.low.map(convert)
+      };
+    }
+
+    function climateApp() {
+      return {
+        unit: 'C',
+        lang: 'ko',
+        
+        init() {
+          createChart(this.unit, this.lang);
+          lucide.createIcons();
+          this.syncTitle();
+        },
+
+        t(key) {
+          return i18n[this.lang][key] || '';
+        },
+
+        formatTemp(c) {
+          return this.unit === 'F' ? Math.round(c * 1.8 + 32) + '°F' : c + '°C';
+        },
+
+        changeLang(newLang) {
+          this.lang = newLang;
+          this.syncTitle();
+          updateChartData(this.unit, this.lang);
+        },
+
+        changeUnit(newUnit) {
+          this.unit = newUnit;
+          updateChartData(this.unit, this.lang);
+        },
+
+        syncTitle() {
+          document.title = this.t('title') + ' | Seongnam vs Silicon Valley';
+        }
+      };
+    }
+
+    function createChart(unit, lang) {
+      const data = getConvertedDataset(unit);
+      const ctx = document.getElementById('tempChart').getContext('2d');
+      const labels = lang === 'ko' ? rawData.months_ko : rawData.months_en;
+
+      weatherChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: i18n[lang].chartLabelSeongnamHigh,
+              data: data.seongnamHigh,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.05)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true,
+              pointHoverRadius: 7
+            },
+            {
+              label: i18n[lang].chartLabelSeongnamLow,
+              data: data.seongnamLow,
+              borderColor: '#93c5fd',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              tension: 0.35,
+              fill: false,
+              pointHoverRadius: 5
+            },
+            {
+              label: i18n[lang].chartLabelValleyHigh,
+              data: data.valleyHigh,
+              borderColor: '#d97706',
+              backgroundColor: 'rgba(217, 119, 6, 0.03)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true,
+              pointHoverRadius: 7
+            },
+            {
+              label: i18n[lang].chartLabelValleyLow,
+              data: data.valleyLow,
+              borderColor: '#fcd34d',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              tension: 0.35,
+              fill: false,
+              pointHoverRadius: 5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                font: { size: 11, family: 'sans-serif' },
+                padding: 15
+              }
+            },
+            tooltip: {
+              backgroundColor: '#1e293b',
+              padding: 10,
+              titleFont: { size: 12, weight: 'bold' },
+              bodyFont: { size: 12 },
+              cornerRadius: 8,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${context.raw}°${unit}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                font: { size: 11 },
+                callback: function(value) { return value + '°'; }
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function updateChartData(unit, lang) {
+      if (!weatherChartInstance) return;
+      const data = getConvertedDataset(unit);
+      const labels = lang === 'ko' ? rawData.months_ko : rawData.months_en;
+
+      weatherChartInstance.data.labels = labels;
+
+      weatherChartInstance.data.datasets[0].data = data.seongnamHigh;
+      weatherChartInstance.data.datasets[0].label = i18n[lang].chartLabelSeongnamHigh;
+
+      weatherChartInstance.data.datasets[1].data = data.seongnamLow;
+      weatherChartInstance.data.datasets[1].label = i18n[lang].chartLabelSeongnamLow;
+
+      weatherChartInstance.data.datasets[2].data = data.valleyHigh;
+      weatherChartInstance.data.datasets[2].label = i18n[lang].chartLabelValleyHigh;
+
+      weatherChartInstance.data.datasets[3].data = data.valleyLow;
+      weatherChartInstance.data.datasets[3].label = i18n[lang].chartLabelValleyLow;
+
+      weatherChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
+        return ` ${context.dataset.label}: ${context.raw}°${unit}`;
+      };
+
+      weatherChartInstance.update();
+    }
+  </script>
+</body>
+</html>
