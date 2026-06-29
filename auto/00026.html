@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Comparison: Seongnam vs. Silicon Valley</title>
+  
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            seongnam: {
+              light: '#eff6ff',
+              brand: '#2563eb',
+              dark: '#1e3a8a',
+            },
+            valley: {
+              light: '#fffbeb',
+              brand: '#d97706',
+              dark: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Alpine.js CDN (Deferred for optimal loading) -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <style>
+    /* Custom scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen" 
+      x-data="{ 
+        unit: 'F', 
+        formatTemp(c) {
+          return this.unit === 'F' ? Math.round(c * 1.8 + 32) + '°F' : c + '°C';
+        },
+        toggleUnit() {
+          this.unit = this.unit === 'F' ? 'C' : 'F';
+          updateChartData(this.unit);
+        }
+      }">
+
+  <!-- Header Section -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-blue-50 text-blue-600 rounded-xl">
+          <i data-lucide="cloud-sun" class="w-8 h-8"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Climate Comparison</h1>
+          <p class="text-xs text-slate-500">Seongnam, South Korea vs. Silicon Valley, CA</p>
+        </div>
+      </div>
+      
+      <!-- Unit Selector Toggle -->
+      <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
+        <button @click="if(unit !== 'F') toggleUnit()" 
+                :class="unit === 'F' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+          Fahrenheit (°F)
+        </button>
+        <button @click="if(unit !== 'C') toggleUnit()" 
+                :class="unit === 'C' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200">
+          Celsius (°C)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Hero / Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Seongnam Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-50 rounded-full opacity-50 pointer-events-none"></div>
+        <div>
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full mb-3">
+                <i data-lucide="globe" class="w-3.5 h-3.5"></i> East Asia
+              </span>
+              <h2 class="text-2xl font-bold text-slate-900">Seongnam, South Korea</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Classification</span>
+              <span class="text-sm font-semibold text-slate-700">Dwa / Cwa (Continental)</span>
+            </div>
+          </div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            Influenced heavily by the Siberian High in winter and the East Asian Monsoon in summer. Features four dramatically distinct seasons ranging from freezing, dry winter winds to hot, tropical, and heavily wet summer periods.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 mt-6">
+          <div>
+            <p class="text-xs text-slate-400">Extreme Winter Avg</p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(-7) + ' to ' + formatTemp(3)"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Extreme Summer Avg</p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(22) + ' to ' + formatTemp(31)"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Silicon Valley Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-50 rounded-full opacity-50 pointer-events-none"></div>
+        <div>
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full mb-3">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> California, USA
+              </span>
+              <h2 class="text-2xl font-bold text-slate-900">Silicon Valley</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Classification</span>
+              <span class="text-sm font-semibold text-slate-700">Csb (Mediterranean)</span>
+            </div>
+          </div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            Covers Palo Alto, Mountain View, and Sunnyvale. Strongly moderated by the Pacific Ocean and SF Bay. Characterized by exceptional thermal stability, featuring comfortable, arid summers and mild, green winters.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 mt-6">
+          <div>
+            <p class="text-xs text-slate-400">Mild Winter Avg</p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(4) + ' to ' + formatTemp(15)"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Comfortable Summer Avg</p>
+            <p class="text-lg font-bold text-slate-800" x-text="formatTemp(13) + ' to ' + formatTemp(27)"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Data Chart Dashboard -->
+    <section class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Monthly Average Temperatures</h3>
+          <p class="text-xs text-slate-500">Comparison of seasonal trajectory throughout the year</p>
+        </div>
+      </div>
+      <div class="relative w-full h-[320px] sm:h-[400px]">
+        <canvas id="tempChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Metric Table Comparison -->
+    <section class="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-900">Direct Climate Metrics</h3>
+        <p class="text-xs text-slate-500">Side-by-side core meteorological values</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/70 border-b border-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <th class="p-4">Key Metric</th>
+              <th class="p-4 border-l border-slate-100/50">Seongnam, South Korea</th>
+              <th class="p-4 border-l border-slate-100/50">Silicon Valley (Sunnyvale, MV, Palo Alto)</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Hottest Month</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium text-slate-900">August</span><br>
+                <span class="text-xs text-slate-500" x-text="'Avg: ' + formatTemp(22) + ' to ' + formatTemp(31)"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium text-slate-900">August / September</span><br>
+                <span class="text-xs text-slate-500" x-text="'Avg: ' + formatTemp(13) + ' to ' + formatTemp(27)"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Coldest Month</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium text-slate-900">January</span><br>
+                <span class="text-xs text-slate-500" x-text="'Avg: ' + formatTemp(-7) + ' to ' + formatTemp(3)"></span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium text-slate-900">December / January</span><br>
+                <span class="text-xs text-slate-500" x-text="'Avg: ' + formatTemp(4) + ' to ' + formatTemp(15)"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Annual Precipitation</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-blue-600">~50.4 inches</span> (1,281 mm)<br>
+                <span class="text-xs text-slate-500">Heavily concentrated in summer</span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-semibold text-amber-600">~14.5 inches</span> (368 mm)<br>
+                <span class="text-xs text-slate-500">Heavily concentrated in winter</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Precipitation Pattern</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Summer Monsoon (*Jangma*)</span><br>
+                <span class="text-xs text-slate-500">July alone receives ~12.8 inches (324 mm)</span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Winter Storm Tracks</span><br>
+                <span class="text-xs text-slate-500">Dry summers (June–Sept average &lt; 0.1 inches)</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Snowfall</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Regular winter snowfall</span><br>
+                <span class="text-xs text-slate-500">Precipitation falls as snow from Dec to Feb</span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Extremely Rare / None</span><br>
+                <span class="text-xs text-slate-500">Temps almost never dip to freezing at valley floor</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-900">Relative Humidity</td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Highly Variable</span><br>
+                <span class="text-xs text-slate-500">Uncomfortably high (80%+) in July/August</span>
+              </td>
+              <td class="p-4 border-l border-slate-100/50">
+                <span class="font-medium">Consistently Moderate</span><br>
+                <span class="text-xs text-slate-500">Dry, comfortable summer afternoons (40%–50%)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Seasonal Breakdown Grid -->
+    <section class="space-y-4">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Seasonal Dynamics</h3>
+        <p class="text-xs text-slate-500">How the weather changes quarter by quarter</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Winter -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-sky-50 text-sky-600 rounded-xl">
+              <i data-lucide="snowflake" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900">Winter <span class="text-xs font-normal text-slate-500">(Dec–Feb)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]">Seongnam</p>
+              <p class="text-slate-600">Freezing, crisp, and dry. Dominated by cold continental winds from Siberia. Frequent frost and light-to-moderate snow.</p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]">Silicon Valley</p>
+              <p class="text-slate-600">Cool, green, and periodically rainy. Mild daytime temperatures mean snow is non-existent on the valley floor.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spring -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+              <i data-lucide="flower" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900">Spring <span class="text-xs font-normal text-slate-500">(Mar–May)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]">Seongnam</p>
+              <p class="text-slate-600">Rapid warming with cherry blossom season. Pleasant temperatures, but occasionally affected by desert dust winds.</p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]">Silicon Valley</p>
+              <p class="text-slate-600">Pleasant, sunny, and highly comfortable. Rains quickly transition into dry, sunny spring afternoons in the 70s.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summer -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-amber-50 text-amber-500 rounded-xl">
+              <i data-lucide="sun" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900">Summer <span class="text-xs font-normal text-slate-500">(Jun–Aug)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]">Seongnam</p>
+              <p class="text-slate-600">Hot, humid, and rainy. The monsoon brings persistent tropical downpours and high heat indices that make it feel muggy.</p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]">Silicon Valley</p>
+              <p class="text-slate-600">Warm, bone-dry, and sunny. Absolute absence of rain, with cooling marine layers keeping humidity exceptionally comfortable.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autumn -->
+        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="p-2 bg-orange-50 text-orange-600 rounded-xl">
+              <i data-lucide="leaf" class="w-5 h-5"></i>
+            </span>
+            <h4 class="font-bold text-slate-900">Autumn <span class="text-xs font-normal text-slate-500">(Sep–Nov)</span></h4>
+          </div>
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div>
+              <p class="font-bold text-blue-600 uppercase tracking-wider text-[10px]">Seongnam</p>
+              <p class="text-slate-600">Crisp, clear sky conditions with brilliant fall colors. Cooling temperatures, dropping rapidly as November approaches.</p>
+            </div>
+            <div class="border-t border-slate-100 pt-3">
+              <p class="font-bold text-amber-600 uppercase tracking-wider text-[10px]">Silicon Valley</p>
+              <p class="text-slate-600">Extended summer-like conditions through September and October. Gentle transitions with late-year rain beginning in late November.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-400">
+    <p>Climate comparison generated from verified long-term regional meteorological trends.</p>
+  </footer>
+
+  <!-- Script block containing interactive Chart.js implementation -->
+  <script>
+    // Raw temperature metrics in Celsius
+    const rawData = {
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      seongnam: {
+        high: [3, 6, 11, 18, 23, 27, 29, 31, 26, 20, 12, 5],
+        low: [-7, -4, 1, 7, 13, 18, 22, 22, 16, 9, 2, -5]
+      },
+      valley: {
+        high: [15, 17, 19, 21, 23, 26, 27, 27, 27, 24, 18, 15],
+        low: [4, 6, 7, 8, 10, 12, 13, 13, 13, 10, 7, 4]
+      }
+    };
+
+    let weatherChart;
+
+    function getConvertedData(unit) {
+      const convert = (c) => unit === 'F' ? Math.round(c * 1.8 + 32) : c;
+      return {
+        seongnamHigh: rawData.seongnam.high.map(convert),
+        seongnamLow: rawData.seongnam.low.map(convert),
+        valleyHigh: rawData.valley.high.map(convert),
+        valleyLow: rawData.valley.low.map(convert)
+      };
+    }
+
+    function createChart(unit) {
+      const data = getConvertedData(unit);
+      const ctx = document.getElementById('tempChart').getContext('2d');
+      
+      weatherChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: rawData.months,
+          datasets: [
+            {
+              label: `Seongnam High Temp (°${unit})`,
+              data: data.seongnamHigh,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.05)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true,
+              pointHoverRadius: 7
+            },
+            {
+              label: `Seongnam Low Temp (°${unit})`,
+              data: data.seongnamLow,
+              borderColor: '#93c5fd',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              tension: 0.35,
+              fill: false,
+              pointHoverRadius: 5
+            },
+            {
+              label: `Silicon Valley High Temp (°${unit})`,
+              data: data.valleyHigh,
+              borderColor: '#d97706',
+              backgroundColor: 'rgba(217, 119, 6, 0.03)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true,
+              pointHoverRadius: 7
+            },
+            {
+              label: `Silicon Valley Low Temp (°${unit})`,
+              data: data.valleyLow,
+              borderColor: '#fcd34d',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              tension: 0.35,
+              fill: false,
+              pointHoverRadius: 5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                font: { size: 11, family: 'sans-serif' },
+                padding: 15
+              }
+            },
+            tooltip: {
+              backgroundColor: '#1e293b',
+              padding: 10,
+              titleFont: { size: 12, weight: 'bold' },
+              bodyFont: { size: 12 },
+              cornerRadius: 8,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label.split(' (')[0]}: ${context.raw}°${unit}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                font: { size: 11 },
+                callback: function(value) { return value + '°'; }
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function updateChartData(unit) {
+      if (!weatherChart) return;
+      const data = getConvertedData(unit);
+      
+      weatherChart.data.datasets[0].data = data.seongnamHigh;
+      weatherChart.data.datasets[0].label = `Seongnam High Temp (°${unit})`;
+      
+      weatherChart.data.datasets[1].data = data.seongnamLow;
+      weatherChart.data.datasets[1].label = `Seongnam Low Temp (°${unit})`;
+      
+      weatherChart.data.datasets[2].data = data.valleyHigh;
+      weatherChart.data.datasets[2].label = `Silicon Valley High Temp (°${unit})`;
+      
+      weatherChart.data.datasets[3].data = data.valleyLow;
+      weatherChart.data.datasets[3].label = `Silicon Valley Low Temp (°${unit})`;
+
+      weatherChart.options.plugins.tooltip.callbacks.label = function(context) {
+        return ` ${context.dataset.label.split(' (')[0]}: ${context.raw}°${unit}`;
+      };
+      weatherChart.update();
+    }
+
+    // Initialize tools when document is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      createChart('F');
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
