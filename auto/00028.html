@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>House Price Trends</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1a56db',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <div class="max-w-6xl mx-auto px-4 py-12" x-data="priceChartApp()">
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl font-extrabold text-gray-900 mb-4">House Price Trends</h1>
+      <p class="text-lg text-gray-600">Interactive visualization of home prices over time in the Silicon Valley
+        area.</p>
+    </header>
+
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- City Selection -->
+        <div>
+          <label for="city" class="block text-sm font-medium text-gray-700 mb-2">Select City</label>
+          <select id="city" x-model="selectedCity" @change="updateChart()"
+            class="w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand focus:border-brand block">
+            <template x-for="city in cities" :key="city">
+              <option :value="city" x-text="city.replace('_', ' ')"></option>
+            </template>
+          </select>
+        </div>
+
+        <!-- Percentile Selection -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Select Metrics</label>
+          <div class="flex flex-wrap gap-4">
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" x-model="metrics.P50" @change="updateChart()"
+                class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+              <span class="ml-2 text-sm text-gray-600">Median (P50)</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" x-model="metrics.P95" @change="updateChart()"
+                class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+              <span class="ml-2 text-sm text-gray-600">High End (P95)</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" x-model="metrics.P99" @change="updateChart()"
+                class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+              <span class="ml-2 text-sm text-gray-600">Luxury (P99)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative h-[500px] w-full">
+        <canvas id="priceChart"></canvas>
+      </div>
+    </div>
+
+    <footer class="text-center text-gray-500 text-sm">
+      Data source: house_prices.js
+    </footer>
+  </div>
+
+  <!-- Load data first, then the library, then the app logic -->
+  <script>
+    const housePrices = {
+      "Palo_Alto": [
+        { "year": 1990, "P50": 360000, "P95": 594000, "P99": 936000 },
+        { "year": 1991, "P50": 350000, "P95": 581000, "P99": 917000 },
+        { "year": 1992, "P50": 345000, "P95": 574000, "P99": 907000 },
+        { "year": 1993, "P50": 340000, "P95": 568000, "P99": 898000 },
+        { "year": 1994, "P50": 370000, "P95": 622000, "P99": 984000 },
+        { "year": 1995, "P50": 420000, "P95": 701000, "P99": 1121000 },
+        { "year": 1996, "P50": 480000, "P95": 806000, "P99": 1291000 },
+        { "year": 1997, "P50": 560000, "P95": 946000, "P99": 1518000 },
+        { "year": 1998, "P50": 680000, "P95": 1156000, "P99": 1856000 },
+        { "year": 1999, "P50": 820000, "P95": 1402000, "P99": 2255000 },
+        { "year": 2000, "P50": 980000, "P95": 1656000, "P99": 2685000 },
+        { "year": 2001, "P50": 990000, "P95": 1683000, "P99": 2732000 },
+        { "year": 2002, "P50": 1050000, "P95": 1795000, "P99": 2919000 },
+        { "year": 2003, "P50": 1150000, "P95": 1978000, "P99": 3215000 },
+        { "year": 2004, "P50": 1300000, "P95": 2249000, "P99": 3653000 },
+        { "year": 2005, "P50": 1450000, "P95": 2523000, "P99": 4096000 },
+        { "year": 2006, "P50": 1550000, "P95": 2712000, "P99": 4402000 },
+        { "year": 2007, "P50": 1600000, "P95": 2816000, "P99": 4576000 },
+        { "year": 2008, "P50": 1500000, "P95": 2655000, "P99": 4320000 },
+        { "year": 2009, "P50": 1380000, "P95": 2456000, "P99": 4002000 },
+        { "year": 2010, "P50": 1350000, "P95": 2416000, "P99": 3942000 },
+        { "year": 2011, "P50": 1450000, "P95": 2610000, "P99": 4262000 },
+        { "year": 2012, "P50": 1650000, "P95": 2986000, "P99": 4884000 },
+        { "year": 2013, "P50": 1900000, "P95": 3458000, "P99": 5662000 },
+        { "year": 2014, "P50": 2200000, "P95": 4026000, "P99": 6596000 },
+        { "year": 2015, "P50": 2500000, "P95": 4600000, "P99": 7550000 },
+        { "year": 2016, "P50": 2650000, "P95": 4902500, "P99": 8056000 },
+        { "year": 2017, "P50": 2850000, "P95": 5272500, "P99": 8721000 },
+        { "year": 2018, "P50": 3000000, "P95": 5580000, "P99": 9240000 },
+        { "year": 2019, "P50": 2950000, "P95": 5516500, "P99": 9145000 },
+        { "year": 2020, "P50": 3100000, "P95": 5828000, "P99": 9672000 },
+        { "year": 2021, "P50": 3400000, "P95": 6426000, "P99": 10676000 },
+        { "year": 2022, "P50": 3550000, "P95": 6745000, "P99": 11218000 },
+        { "year": 2023, "P50": 3450000, "P95": 6555000, "P99": 10971000 },
+        { "year": 2024, "P50": 3500000, "P95": 6685000, "P99": 11200000 },
+        { "year": 2025, "P50": 3550000, "P95": 6816000, "P99": 11431000 },
+        { "year": 2026, "P50": 3600000, "P95": 6948000, "P99": 11664000 }
+      ],
+      "Mountain_View": [
+        { "year": 1990, "P50": 260000, "P95": 390000, "P99": 572000 },
+        { "year": 1991, "P50": 250000, "P95": 376000, "P99": 552500 },
+        { "year": 1992, "P50": 245000, "P95": 370000, "P99": 544000 },
+        { "year": 1993, "P50": 240000, "P95": 363600, "P99": 535000 },
+        { "year": 1994, "P50": 255000, "P95": 387600, "P99": 571200 },
+        { "year": 1995, "P50": 290000, "P95": 442200, "P99": 652500 },
+        { "year": 1996, "P50": 330000, "P95": 504900, "P99": 745800 },
+        { "year": 1997, "P50": 390000, "P95": 598600, "P99": 885300 },
+        { "year": 1998, "P50": 460000, "P95": 708400, "P99": 1048800 },
+        { "year": 1999, "P50": 540000, "P95": 834300, "P99": 1236600 },
+        { "year": 2000, "P50": 620000, "P95": 961000, "P99": 1426000 },
+        { "year": 2001, "P50": 615000, "P95": 956000, "P99": 1420000 },
+        { "year": 2002, "P50": 640000, "P95": 998000, "P99": 1484000 },
+        { "year": 2003, "P50": 690000, "P95": 1081000, "P99": 1607000 },
+        { "year": 2004, "P50": 760000, "P95": 1197000, "P99": 1778000 },
+        { "year": 2005, "P50": 850000, "P95": 1343000, "P99": 1997500 },
+        { "year": 2006, "P50": 890000, "P95": 1410000, "P99": 2100000 },
+        { "year": 2007, "P50": 920000, "P95": 1462000, "P99": 2180000 },
+        { "year": 2008, "P50": 860000, "P95": 1371000, "P99": 2046000 },
+        { "year": 2009, "P50": 800000, "P95": 1279000, "P99": 1912000 },
+        { "year": 2010, "P50": 780000, "P95": 1251000, "P99": 1872000 },
+        { "year": 2011, "P50": 830000, "P95": 1336000, "P99": 2000000 },
+        { "year": 2012, "P50": 920000, "P95": 1485000, "P99": 2226000 },
+        { "year": 2013, "P50": 1050000, "P95": 1701000, "P99": 2551000 },
+        { "year": 2014, "P50": 1220000, "P95": 1982500, "P99": 2976800 },
+        { "year": 2015, "P50": 1400000, "P95": 2282000, "P99": 3430000 },
+        { "year": 2016, "P50": 1520000, "P95": 2485000, "P99": 3739000 },
+        { "year": 2017, "P50": 1680000, "P95": 2755000, "P99": 4149000 },
+        { "year": 2018, "P50": 1800000, "P95": 2961000, "P99": 4464000 },
+        { "year": 2019, "P50": 1750000, "P95": 2887500, "P99": 4357500 },
+        { "year": 2020, "P50": 1850000, "P95": 3052500, "P99": 4606500 },
+        { "year": 2021, "P50": 1950000, "P95": 3217500, "P99": 4855500 },
+        { "year": 2022, "P50": 2050000, "P95": 3382500, "P99": 5104500 },
+        { "year": 2023, "P50": 1980000, "P95": 3267000, "P99": 4930200 },
+        { "year": 2024, "P50": 2000000, "P95": 3300000, "P99": 4980000 },
+        { "year": 2025, "P50": 2010000, "P95": 3316500, "P99": 5004900 },
+        { "year": 2026, "P50": 2020000, "P95": 3333000, "P99": 5050000 }
+      ],
+      "Sunnyvale": [
+        { "year": 1990, "P50": 235000, "P95": 340750, "P99": 470000 },
+        { "year": 1991, "P50": 226000, "P95": 328300, "P99": 454200 },
+        { "year": 1992, "P50": 222000, "P95": 323000, "P99": 448400 },
+        { "year": 1993, "P50": 218000, "P95": 317800, "P99": 442500 },
+        { "year": 1994, "P50": 228000, "P95": 333500, "P99": 465100 },
+        { "year": 1995, "P50": 250000, "P95": 366250, "P99": 512500 },
+        { "year": 1996, "P50": 274000, "P95": 402750, "P99": 564400 },
+        { "year": 1997, "P50": 310000, "P95": 457250, "P99": 641700 },
+        { "year": 1998, "P50": 370000, "P95": 547600, "P99": 769600 },
+        { "year": 1999, "P50": 440000, "P95": 653400, "P99": 919600 },
+        { "year": 2000, "P50": 530000, "P95": 789700, "P99": 1113000 },
+        { "year": 2001, "P50": 520000, "P95": 777400, "P99": 1097200 },
+        { "year": 2002, "P50": 540000, "P95": 810000, "P99": 1144800 },
+        { "year": 2003, "P50": 590000, "P95": 887950, "P99": 1256700 },
+        { "year": 2004, "P50": 670000, "P95": 1011700, "P99": 1433800 },
+        { "year": 2005, "P50": 760000, "P95": 1151400, "P99": 1634000 },
+        { "year": 2006, "P50": 800000, "P95": 1216000, "P99": 1728000 },
+        { "year": 2007, "P50": 840000, "P95": 1281000, "P99": 1822800 },
+        { "year": 2008, "P50": 780000, "P95": 1193400, "P99": 1700400 },
+        { "year": 2009, "P50": 710000, "P95": 1089850, "P99": 1554900 },
+        { "year": 2010, "P50": 680000, "P95": 1047200, "P99": 1496000 },
+        { "year": 2011, "P50": 720000, "P95": 1112400, "P99": 1591200 },
+        { "year": 2012, "P50": 810000, "P95": 1255500, "P99": 1802200 },
+        { "year": 2013, "P50": 920000, "P95": 1430600, "P99": 2060800 },
+        { "year": 2014, "P50": 1020000, "P95": 1581000, "P99": 2284800 },
+        { "year": 2015, "P50": 1150000, "P95": 1782500, "P99": 2587500 },
+        { "year": 2016, "P50": 1280000, "P95": 1984000, "P99": 2892800 },
+        { "year": 2017, "P50": 1420000, "P95": 2201000, "P99": 3223400 },
+        { "year": 2018, "P50": 1550000, "P95": 2402500, "P99": 3534000 },
+        { "year": 2019, "P50": 1500000, "P95": 2325000, "P99": 3435000 },
+        { "year": 2020, "P50": 1600000, "P95": 2480000, "P99": 3680000 },
+        { "year": 2021, "P50": 1800000, "P95": 2790000, "P99": 4140000 },
+        { "year": 2022, "P50": 1950000, "P95": 3022500, "P99": 4485000 },
+        { "year": 2023, "P50": 1880000, "P95": 2914000, "P99": 4324000 },
+        { "year": 2024, "P50": 1980000, "P95": 3069000, "P99": 4554000 },
+        { "year": 2025, "P50": 2050000, "P95": 3177500, "P99": 4715000 },
+        { "year": 2026, "P50": 2110000, "P95": 3270500, "P99": 4853000 }
+      ]
+    };        
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script>
+    function priceChartApp() {
+      let chartInstance = null; // Use a closure variable to avoid Alpine reactivity loops
+
+      return {
+        selectedCity: 'Palo_Alto',
+        metrics: {
+          P50: true,
+          P95: false,
+          P99: false
+        },
+        cities: Object.keys(housePrices),
+
+        init() {
+          this.initChart();
+          this.updateChart();
+        },
+
+        initChart() {
+          const ctx = document.getElementById('priceChart').getContext('2d');
+          chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [],
+              datasets: []
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false,
+              },
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.dataset.label || '';
+                      if (label) {
+                        label += ': ';
+                      }
+                      if (context.parsed.y !== null) {
+                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(context.parsed.y);
+                      }
+                      return label;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  type: 'logarithmic',
+                  beginAtZero: false,
+                  ticks: {
+                    callback: function (value) {
+                      return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        notation: 'compact',
+                        maximumFractionDigits: 1
+                      }).format(value);
+                    }
+                  }
+                }
+              }
+            }
+          });
+        },
+
+        updateChart() {
+          const data = housePrices[this.selectedCity];
+          const labels = data.map(d => d.year);
+
+          const datasets = [];
+
+          if (this.metrics.P50) {
+            datasets.push({
+              label: 'Median (P50)',
+              data: data.map(d => d.P50),
+              borderColor: '#1a56db',
+              backgroundColor: '#1a56db',
+              borderWidth: 3,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5
+            });
+          }
+
+          if (this.metrics.P95) {
+            datasets.push({
+              label: 'High End (P95)',
+              data: data.map(d => d.P95),
+              borderColor: '#ef4444',
+              backgroundColor: '#ef4444',
+              borderWidth: 3,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5
+            });
+          }
+
+          if (this.metrics.P99) {
+            datasets.push({
+              label: 'Luxury (P99)',
+              data: data.map(d => d.P99),
+              borderColor: '#10b981',
+              backgroundColor: '#10b981',
+              borderWidth: 3,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5
+            });
+          }
+
+          chartInstance.data.labels = labels;
+          chartInstance.data.datasets = datasets;
+          chartInstance.update();
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
